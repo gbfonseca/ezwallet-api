@@ -11,5 +11,8 @@
     "email": "gabriel.fonsecadev@gmail.com",
     "name": "Gabriel Fonseca"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
 }
