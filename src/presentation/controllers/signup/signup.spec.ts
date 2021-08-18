@@ -2,16 +2,36 @@ import SignUpController from './signup';
 import { EmailValidator } from './signup-protocols';
 import { MissingParamError, InvalidParamError } from '../../errors';
 import { serverError } from '../../helpers';
+import { AccountModel, AddAccountModel } from '../../../domain/models/account';
+import { AddAccount } from '../../../domain/protocols';
 
 interface SutTypes {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
+  addAccountStub: AddAccount;
 }
+
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add(addAccount: AddAccountModel): AccountModel {
+      const { name, lastName, email, password } = addAccount;
+      return {
+        id: 'any_id',
+        name,
+        lastName,
+        email,
+        password,
+      };
+    }
+  }
+
+  return new AddAccountStub();
+};
 
 const makeEmailValidator = () => {
   class EmailValidatorStub implements EmailValidator {
     isValid(email: string): boolean {
-      return false;
+      return true;
     }
   }
   return new EmailValidatorStub();
@@ -19,9 +39,10 @@ const makeEmailValidator = () => {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const sut = new SignUpController(emailValidatorStub);
+  const addAccountStub = makeAddAccount();
+  const sut = new SignUpController(emailValidatorStub, addAccountStub);
 
-  return { sut, emailValidatorStub };
+  return { sut, emailValidatorStub, addAccountStub };
 };
 
 describe('SignUp Controller', () => {
@@ -118,6 +139,7 @@ describe('SignUp Controller', () => {
 
   test('should return 400 if no email valid is provided', () => {
     const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -141,12 +163,43 @@ describe('SignUp Controller', () => {
       body: {
         name: 'any_name',
         lastName: 'any_lastName',
-        email: 'invalid_email@mail.com',
+        email: 'any_email@mail.com',
         password: 'any_password',
         confirmPassword: 'any_password',
       },
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
+  });
+
+  test('should return 200 if valid data provided', () => {
+    const { sut, addAccountStub } = makeSut();
+    // jest.spyOn(addAccountStub, 'add').mockImplementationOnce(() => {})
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'valid_email@mail.com',
+        password: 'any_password',
+        confirmPassword: 'any_password',
+      },
+    };
+
+    const httpResponse = sut.handle(httpRequest);
+    const { name, lastName, email, password } = httpRequest.body;
+    addAccountStub.add({
+      name,
+      lastName,
+      email,
+      password,
+    });
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name,
+      lastName,
+      email,
+      password,
+    });
   });
 });
