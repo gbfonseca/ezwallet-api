@@ -1,12 +1,10 @@
 export default {
-  roots: [
-    '<rootDir>/src/',
-  ],
+  roots: ['<rootDir>/src/'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
-  coverageProvider: 'node',
+  coverageProvider: 'babel',
+  testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest',
   },
-
 };
