@@ -19,4 +19,9 @@ describe('EmailValidatorAdapter', () => {
     const isValid = sut.isValid('invalid_email@email.com');
     expect(isValid).toBe(false);
   });
+  test('should EmailValidator returns true if email is true', () => {
+    const sut = makeSut();
+    const isValid = sut.isValid('valid_email@email.com');
+    expect(isValid).toBe(true);
+  });
 });
