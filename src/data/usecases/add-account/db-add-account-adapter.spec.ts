@@ -8,7 +8,7 @@ interface SutTypes {
 
 const makeEncrypterAdapter = () => {
   class EncrypterAdapterStub implements Encrypter {
-    async hash(value: string): Promise<string> {
+    async encrypt(value: string): Promise<string> {
       return new Promise((resolve) => resolve('hashed_password'));
     }
   }
@@ -40,7 +40,7 @@ describe('DbAccountAdapter Use case', () => {
 
   test('should calls encrypter with correct value', async () => {
     const { sut, encrypterAdapterStub } = makeSut();
-    const hashSpy = jest.spyOn(encrypterAdapterStub, 'hash');
+    const hashSpy = jest.spyOn(encrypterAdapterStub, 'encrypt');
     const accountData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
@@ -62,9 +62,28 @@ describe('DbAccountAdapter Use case', () => {
     };
 
     await sut.add(accountData);
-    const hashedPassword = await encrypterAdapterStub.hash(
+    const hashedPassword = await encrypterAdapterStub.encrypt(
       accountData.password,
     );
     expect(hashedPassword).toBe('hashed_password');
+  });
+
+  test('should DbAccountAdapter returns an account on success', async () => {
+    const { sut } = makeSut();
+    const accountData = {
+      name: 'valid_name',
+      lastName: 'valid_lastName',
+      email: 'valid_email@mail.com',
+      password: 'valid_password',
+    };
+
+    const account = await sut.add(accountData);
+    expect(account).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      lastName: 'valid_lastName',
+      email: 'valid_email@mail.com',
+      password: 'hashed_password',
+    });
   });
 });
