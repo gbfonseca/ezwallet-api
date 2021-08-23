@@ -1,10 +1,32 @@
-import { Encrypter } from './../../protocols/encrypter';
+import {
+  Encrypter,
+  AddAccountModel,
+  AddAccountRepository,
+  AccountModel,
+} from './db-add-account-adapter.protocols';
 import { DbAccountAdapter } from './db-add-account-adapter';
 
 interface SutTypes {
   sut: DbAccountAdapter;
   encrypterAdapterStub: Encrypter;
+  addAccountRepositoryStub: AddAccountRepository;
 }
+
+const makeAddAccountRepository = () => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async add(addAccount: AddAccountModel): Promise<AccountModel> {
+      const fakeAccount = {
+        id: 'any_id',
+        name: 'valid_name',
+        lastName: 'valid_lastName',
+        email: 'valid_email@mail.com',
+        password: 'hashed_password',
+      };
+      return new Promise((resolve) => resolve(fakeAccount));
+    }
+  }
+  return new AddAccountRepositoryStub();
+};
 
 const makeEncrypterAdapter = () => {
   class EncrypterAdapterStub implements Encrypter {
@@ -16,10 +38,14 @@ const makeEncrypterAdapter = () => {
 };
 
 const makeSut = (): SutTypes => {
+  const addAccountRepositoryStub = makeAddAccountRepository();
   const encrypterAdapterStub = makeEncrypterAdapter();
-  const sut = new DbAccountAdapter(encrypterAdapterStub);
+  const sut = new DbAccountAdapter(
+    encrypterAdapterStub,
+    addAccountRepositoryStub,
+  );
 
-  return { sut, encrypterAdapterStub };
+  return { sut, encrypterAdapterStub, addAccountRepositoryStub };
 };
 
 describe('DbAccountAdapter Use case', () => {
@@ -78,8 +104,9 @@ describe('DbAccountAdapter Use case', () => {
     };
 
     const account = await sut.add(accountData);
+
     expect(account).toEqual({
-      id: 'valid_id',
+      id: 'any_id',
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
