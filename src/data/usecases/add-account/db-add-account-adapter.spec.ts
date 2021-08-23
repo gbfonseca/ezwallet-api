@@ -113,4 +113,23 @@ describe('DbAccountAdapter Use case', () => {
       password: 'hashed_password',
     });
   });
+
+  test('should DbAccountAdapter throws if encrypter throws', async () => {
+    const { sut, encrypterAdapterStub } = makeSut();
+    jest
+      .spyOn(encrypterAdapterStub, 'encrypt')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error())),
+      );
+    const accountData = {
+      name: 'valid_name',
+      lastName: 'valid_lastName',
+      email: 'valid_email@mail.com',
+      password: 'valid_password',
+    };
+
+    const promise = sut.add(accountData);
+
+    await expect(promise).rejects.toThrow();
+  });
 });
