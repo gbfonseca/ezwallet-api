@@ -51,4 +51,20 @@ describe('DbAccountAdapter Use case', () => {
     await sut.add(accountData);
     expect(hashSpy).toHaveBeenCalledWith('valid_password');
   });
+
+  test('should encrypter returns a hash on success', async () => {
+    const { sut, encrypterAdapterStub } = makeSut();
+    const accountData = {
+      name: 'valid_name',
+      lastName: 'valid_lastName',
+      email: 'valid_email@mail.com',
+      password: 'valid_password',
+    };
+
+    await sut.add(accountData);
+    const hashedPassword = await encrypterAdapterStub.hash(
+      accountData.password,
+    );
+    expect(hashedPassword).toBe('hashed_password');
+  });
 });
