@@ -4,7 +4,7 @@ import {
   AccountModel,
   AddAccount,
   AddAccountModel,
-} from './db-add-account-adapter.protocols';
+} from './db-add-account-adapter-protocols';
 
 export class DbAccountAdapter implements AddAccount {
   constructor(
