@@ -1,5 +1,5 @@
 import { BcryptAdapter } from './bcrypt-adapter';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const salt = 12;
 
@@ -23,5 +23,17 @@ describe('BcryptAdapter', () => {
     const password = 'any_password';
     await sut.encrypt(password);
     expect(hashSpy).toHaveBeenCalledWith('any_password');
+  });
+
+  test('should BcryptAdapter throws if bcrypt throw', async () => {
+    const sut = new BcryptAdapter(salt);
+    jest
+      .spyOn(bcrypt, 'hash')
+      .mockImplementationOnce(
+        () => new Promise((resolve, reject) => reject(new Error())),
+      );
+    const password = 'any_password';
+    const promise = sut.encrypt(password);
+    await expect(promise).rejects.toThrow();
   });
 });
