@@ -21,8 +21,6 @@ const makeAddUserRepository = () => {
         lastName: 'valid_lastName',
         email: 'valid_email@mail.com',
         password: 'hashed_password',
-        created_at: new Date(),
-        updated_at: new Date(),
       };
       return new Promise((resolve) => resolve(fakeUser));
     }
@@ -110,8 +108,6 @@ describe('DbUserAdapter Use case', () => {
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'hashed_password',
-      created_at: new Date(),
-      updated_at: new Date(),
     });
   });
 
