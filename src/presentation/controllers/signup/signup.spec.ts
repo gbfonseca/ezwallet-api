@@ -1,9 +1,9 @@
 import SignUpController from './signup';
 import {
   EmailValidator,
-  AddAccount,
-  AccountModel,
-  AddAccountModel,
+  AddUser,
+  UserModel,
+  AddUserModel,
 } from './signup-protocols';
 import {
   MissingParamError,
@@ -14,27 +14,25 @@ import {
 interface SutTypes {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
-  addAccountStub: AddAccount;
+  addUserStub: AddUser;
 }
 
-const makeAddAccount = (): AddAccount => {
-  class AddAccountStub implements AddAccount {
-    async add(addAccount: AddAccountModel): Promise<AccountModel> {
-      const { name, lastName, email, password } = addAccount;
-      const fakeAccount = {
+const makeAddUser = (): AddUser => {
+  class AddUserStub implements AddUser {
+    async add(addUser: AddUserModel): Promise<UserModel> {
+      const { name, lastName, email, password } = addUser;
+      const fakeUser = {
         id: 'any_id',
         name,
         lastName,
         email,
         password,
-        created_at: new Date(),
-        updated_at: new Date(),
       };
-      return new Promise((resolve) => resolve(fakeAccount));
+      return new Promise((resolve) => resolve(fakeUser));
     }
   }
 
-  return new AddAccountStub();
+  return new AddUserStub();
 };
 
 const makeEmailValidator = () => {
@@ -48,10 +46,10 @@ const makeEmailValidator = () => {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const addAccountStub = makeAddAccount();
-  const sut = new SignUpController(emailValidatorStub, addAccountStub);
+  const addUserStub = makeAddUser();
+  const sut = new SignUpController(emailValidatorStub, addUserStub);
 
-  return { sut, emailValidatorStub, addAccountStub };
+  return { sut, emailValidatorStub, addUserStub };
 };
 
 describe('SignUp Controller', () => {
@@ -165,8 +163,8 @@ describe('SignUp Controller', () => {
   });
 
   test('should return 500 if EmailValidator throws', async () => {
-    const { sut, addAccountStub } = makeSut();
-    jest.spyOn(addAccountStub, 'add').mockImplementation(() => {
+    const { sut, addUserStub } = makeSut();
+    jest.spyOn(addUserStub, 'add').mockImplementation(() => {
       throw new Error();
     });
 
@@ -183,9 +181,9 @@ describe('SignUp Controller', () => {
     expect(httpResponse.statusCode).toBe(500);
   });
 
-  test('should return 500 if AddAccount throws', async () => {
-    const { sut, addAccountStub } = makeSut();
-    jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => {
+  test('should return 500 if AddUser throws', async () => {
+    const { sut, addUserStub } = makeSut();
+    jest.spyOn(addUserStub, 'add').mockImplementationOnce(async () => {
       return await new Promise((resolve, reject) => reject(new Error()));
     });
     const httpRequest = {
@@ -202,9 +200,9 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new ServerError());
   });
 
-  test('should call addAccount with correct values', async () => {
-    const { sut, addAccountStub } = makeSut();
-    const addSpy = jest.spyOn(addAccountStub, 'add');
+  test('should call addUser with correct values', async () => {
+    const { sut, addUserStub } = makeSut();
+    const addSpy = jest.spyOn(addUserStub, 'add');
     const httpRequest = {
       body: {
         name: 'any_email',
@@ -224,7 +222,7 @@ describe('SignUp Controller', () => {
   });
 
   test('should return 200 if valid data provided', async () => {
-    const { sut, addAccountStub } = makeSut();
+    const { sut, addUserStub } = makeSut();
     const httpRequest = {
       body: {
         name: 'any_name',
@@ -237,7 +235,7 @@ describe('SignUp Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest);
     const { name, lastName, email, password } = httpRequest.body;
-    addAccountStub.add({
+    addUserStub.add({
       name,
       lastName,
       email,
@@ -250,8 +248,6 @@ describe('SignUp Controller', () => {
       lastName,
       email,
       password,
-      created_at: new Date(),
-      updated_at: new Date(),
     });
   });
 });

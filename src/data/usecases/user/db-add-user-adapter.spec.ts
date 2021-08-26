@@ -1,21 +1,21 @@
 import {
   Encrypter,
-  AddAccountModel,
-  AddAccountRepository,
-  AccountModel,
-} from './db-add-account-adapter-protocols';
-import { DbAccountAdapter } from './db-add-account-adapter';
+  AddUserModel,
+  AddUserRepository,
+  UserModel,
+} from './db-add-user-adapter-protocols';
+import { DbUserAdapter } from './db-add-user-adapter';
 
 interface SutTypes {
-  sut: DbAccountAdapter;
+  sut: DbUserAdapter;
   encrypterAdapterStub: Encrypter;
-  addAccountRepositoryStub: AddAccountRepository;
+  addUserRepositoryStub: AddUserRepository;
 }
 
-const makeAddAccountRepository = () => {
-  class AddAccountRepositoryStub implements AddAccountRepository {
-    async add(addAccount: AddAccountModel): Promise<AccountModel> {
-      const fakeAccount = {
+const makeAddUserRepository = () => {
+  class AddUserRepositoryStub implements AddUserRepository {
+    async add(addUser: AddUserModel): Promise<UserModel> {
+      const fakeUser = {
         id: 'any_id',
         name: 'valid_name',
         lastName: 'valid_lastName',
@@ -24,10 +24,10 @@ const makeAddAccountRepository = () => {
         created_at: new Date(),
         updated_at: new Date(),
       };
-      return new Promise((resolve) => resolve(fakeAccount));
+      return new Promise((resolve) => resolve(fakeUser));
     }
   }
-  return new AddAccountRepositoryStub();
+  return new AddUserRepositoryStub();
 };
 
 const makeEncrypterAdapter = () => {
@@ -40,74 +40,71 @@ const makeEncrypterAdapter = () => {
 };
 
 const makeSut = (): SutTypes => {
-  const addAccountRepositoryStub = makeAddAccountRepository();
+  const addUserRepositoryStub = makeAddUserRepository();
   const encrypterAdapterStub = makeEncrypterAdapter();
-  const sut = new DbAccountAdapter(
-    encrypterAdapterStub,
-    addAccountRepositoryStub,
-  );
+  const sut = new DbUserAdapter(encrypterAdapterStub, addUserRepositoryStub);
 
-  return { sut, encrypterAdapterStub, addAccountRepositoryStub };
+  return { sut, encrypterAdapterStub, addUserRepositoryStub };
 };
 
-describe('DbAccountAdapter Use case', () => {
-  test('should calls DbAddAccountAdapter with correct values', async () => {
+describe('DbUserAdapter Use case', () => {
+  test('should calls DbAddUserAdapter with correct values', async () => {
     const { sut } = makeSut();
     const addSpy = jest.spyOn(sut, 'add');
-    const accountData = {
+    const userData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'valid_password',
     };
 
-    await sut.add(accountData);
+    await sut.add(userData);
 
-    expect(addSpy).toHaveBeenCalledWith(accountData);
+    expect(addSpy).toHaveBeenCalledWith(userData);
   });
 
   test('should calls encrypter with correct value', async () => {
     const { sut, encrypterAdapterStub } = makeSut();
     const hashSpy = jest.spyOn(encrypterAdapterStub, 'encrypt');
-    const accountData = {
+    const userData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'valid_password',
     };
 
-    await sut.add(accountData);
+    await sut.add(userData);
     expect(hashSpy).toHaveBeenCalledWith('valid_password');
   });
 
   test('should encrypter returns a hash on success', async () => {
     const { sut, encrypterAdapterStub } = makeSut();
-    const accountData = {
+    const userData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'valid_password',
     };
 
-    await sut.add(accountData);
+    await sut.add(userData);
     const hashedPassword = await encrypterAdapterStub.encrypt(
-      accountData.password,
+      userData.password,
     );
     expect(hashedPassword).toBe('hashed_password');
   });
 
-  test('should DbAccountAdapter returns an account on success', async () => {
+  test('should DbUserAdapter returns an user on success', async () => {
     const { sut } = makeSut();
-    const accountData = {
+    const userData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'valid_password',
     };
 
-    const account = await sut.add(accountData);
+    const user = await sut.add(userData);
 
-    expect(account).toEqual({
+    expect(user).toEqual({
       id: 'any_id',
       name: 'valid_name',
       lastName: 'valid_lastName',
@@ -118,40 +115,40 @@ describe('DbAccountAdapter Use case', () => {
     });
   });
 
-  test('should DbAccountAdapter throws if encrypter throws', async () => {
+  test('should DbUserAdapter throws if encrypter throws', async () => {
     const { sut, encrypterAdapterStub } = makeSut();
     jest
       .spyOn(encrypterAdapterStub, 'encrypt')
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error())),
       );
-    const accountData = {
+    const userData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'valid_password',
     };
 
-    const promise = sut.add(accountData);
+    const promise = sut.add(userData);
 
     await expect(promise).rejects.toThrow();
   });
 
-  test('should DbAccountAdapter throws if AddAccountRepository throws', async () => {
-    const { sut, addAccountRepositoryStub } = makeSut();
+  test('should DbUserAdapter throws if AddUserRepository throws', async () => {
+    const { sut, addUserRepositoryStub } = makeSut();
     jest
-      .spyOn(addAccountRepositoryStub, 'add')
+      .spyOn(addUserRepositoryStub, 'add')
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error())),
       );
-    const accountData = {
+    const userData = {
       name: 'valid_name',
       lastName: 'valid_lastName',
       email: 'valid_email@mail.com',
       password: 'valid_password',
     };
 
-    const promise = sut.add(accountData);
+    const promise = sut.add(userData);
 
     await expect(promise).rejects.toThrow();
   });

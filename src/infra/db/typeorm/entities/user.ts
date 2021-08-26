@@ -1,4 +1,4 @@
-import { AccountModel } from '../../../../domain/models/account';
+import { UserModel } from '../../../../domain/models/user';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity('user')
-export class User implements AccountModel {
+export class User implements UserModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

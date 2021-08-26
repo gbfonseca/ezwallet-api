@@ -1,9 +1,9 @@
 import { TypeormHelper } from '../../helpers/typeorm-helper';
-import { AccountTypeormRepository } from './account';
+import { UserTypeormRepository } from './user';
 
-describe('AccountTypeormRepository', () => {
-  const makeSut = (): AccountTypeormRepository => {
-    return new AccountTypeormRepository();
+describe('userTypeormRepository', () => {
+  const makeSut = (): UserTypeormRepository => {
+    return new UserTypeormRepository();
   };
 
   beforeAll(async () => {
@@ -29,21 +29,21 @@ describe('AccountTypeormRepository', () => {
     await TypeormHelper.client.query('DELETE FROM USER');
   });
 
-  test('should return an account if success', async () => {
+  test('should return an user if success', async () => {
     const sut = makeSut();
 
-    const account = await sut.add({
+    const user = await sut.add({
       name: 'any_name',
       lastName: 'any_lastName',
       email: 'any_email@mail.com',
       password: 'any_password',
     });
 
-    expect(account).toBeTruthy();
-    expect(account.id).toBeTruthy();
-    expect(account.name).toBe('any_name');
-    expect(account.lastName).toBe('any_lastName');
-    expect(account.email).toBe('any_email@mail.com');
-    expect(account.password).toBe('any_password');
+    expect(user).toBeTruthy();
+    expect(user.id).toBeTruthy();
+    expect(user.name).toBe('any_name');
+    expect(user.lastName).toBe('any_lastName');
+    expect(user.email).toBe('any_email@mail.com');
+    expect(user.password).toBe('any_password');
   });
 });
