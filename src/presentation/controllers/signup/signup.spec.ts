@@ -27,6 +27,8 @@ const makeAddAccount = (): AddAccount => {
         lastName,
         email,
         password,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
       return new Promise((resolve) => resolve(fakeAccount));
     }
@@ -248,6 +250,8 @@ describe('SignUp Controller', () => {
       lastName,
       email,
       password,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
   });
 });

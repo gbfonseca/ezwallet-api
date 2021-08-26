@@ -4,4 +4,6 @@ export interface AccountModel {
   lastName: string;
   email: string;
   password: string;
+  created_at: Date;
+  updated_at: Date;
 }
