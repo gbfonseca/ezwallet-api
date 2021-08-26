@@ -1,4 +1,4 @@
-import { PostgresHelper } from '../../helpers/postgres-helper';
+import { TypeormHelper } from '../../helpers/typeorm-helper';
 import { AccountPostgresRepository } from './account';
 
 describe('AccountPostgresRepository', () => {
@@ -7,7 +7,7 @@ describe('AccountPostgresRepository', () => {
   };
 
   beforeAll(async () => {
-    await PostgresHelper.connect({
+    await TypeormHelper.connect({
       type: 'sqlite',
       database: 'test.sql',
       entities: ['src/infra/db/typeorm/entities/**.ts'],
@@ -21,11 +21,11 @@ describe('AccountPostgresRepository', () => {
   });
 
   afterAll(() => {
-    PostgresHelper.client.close();
+    TypeormHelper.client.close();
   });
 
   beforeEach(async () => {
-    await PostgresHelper.clear();
+    await TypeormHelper.clear();
   });
 
   test('should return an account if success', async () => {

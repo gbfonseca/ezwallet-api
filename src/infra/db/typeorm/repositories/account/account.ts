@@ -1,6 +1,6 @@
 import { AccountModel } from '../../../../../domain/models/account';
 import { AddAccountModel } from '../../../../../domain/usecases/add-account';
-// import { PostgresHelper } from '../../helpers/postgres-helper';
+import { TypeormHelper } from '../../helpers/typeorm-helper';
 import { AddAccountRepository } from '../../../../../data/protocols/add-account-repository';
 import { User } from '../../entities/account';
 import { getRepository } from 'typeorm';

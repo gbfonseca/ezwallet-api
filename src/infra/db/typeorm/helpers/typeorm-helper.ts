@@ -1,5 +1,5 @@
 import { createConnection, Connection, ConnectionOptions } from 'typeorm';
-export const PostgresHelper = {
+export const TypeormHelper = {
   client: null as unknown as Connection,
   async connect(config: ConnectionOptions): Promise<void> {
     this.client = await createConnection(config);
