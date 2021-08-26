@@ -1,21 +1,22 @@
 import { TypeormHelper } from '../../helpers/typeorm-helper';
-import { AccountPostgresRepository } from './account';
+import { AccountTypeormRepository } from './account';
 
-describe('AccountPostgresRepository', () => {
-  const makeSut = (): AccountPostgresRepository => {
-    return new AccountPostgresRepository();
+describe('AccountTypeormRepository', () => {
+  const makeSut = (): AccountTypeormRepository => {
+    return new AccountTypeormRepository();
   };
 
   beforeAll(async () => {
     await TypeormHelper.connect({
       type: 'sqlite',
-      database: 'test.sql',
+      database: ':memory:',
       entities: ['src/infra/db/typeorm/entities/**.ts'],
       migrations: ['src/infra/db/typeorm/migrations/**.ts'],
-      migrationsRun: true,
       synchronize: true,
+      migrationsRun: true,
       cli: {
         migrationsDir: './src/infra/db/typeorm/migrations',
+        entitiesDir: './src/infra/db/typeorm/entities',
       },
     });
   });
@@ -25,7 +26,7 @@ describe('AccountPostgresRepository', () => {
   });
 
   beforeEach(async () => {
-    await TypeormHelper.clear();
+    await TypeormHelper.client.query('DELETE FROM USER');
   });
 
   test('should return an account if success', async () => {

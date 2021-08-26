@@ -1,4 +1,10 @@
-import { createConnection, Connection, ConnectionOptions } from 'typeorm';
+import {
+  createConnection,
+  Connection,
+  ConnectionOptions,
+  EntityTarget,
+  getRepository,
+} from 'typeorm';
 export const TypeormHelper = {
   client: null as unknown as Connection,
   async connect(config: ConnectionOptions): Promise<void> {
@@ -11,5 +17,10 @@ export const TypeormHelper = {
       const repository = this.client.getRepository(entity.name);
       await repository.query(`DELETE FROM ${entity.name}`);
     });
+  },
+
+  async save<T>(entity: EntityTarget<T>, data: T): Promise<T> {
+    const repository = getRepository(entity);
+    return await repository.save(data);
   },
 };

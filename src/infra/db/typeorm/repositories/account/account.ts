@@ -1,18 +1,18 @@
 import { AccountModel } from '../../../../../domain/models/account';
 import { AddAccountModel } from '../../../../../domain/usecases/add-account';
-import { TypeormHelper } from '../../helpers/typeorm-helper';
 import { AddAccountRepository } from '../../../../../data/protocols/add-account-repository';
 import { User } from '../../entities/account';
-import { getRepository } from 'typeorm';
-export class AccountPostgresRepository implements AddAccountRepository {
+import { Repository, getRepository } from 'typeorm';
+export class AccountTypeormRepository implements AddAccountRepository {
+  private readonly userRepository: Repository<User>;
+
+  constructor() {
+    this.userRepository = getRepository(User);
+  }
+
   async add(addAccount: AddAccountModel): Promise<AccountModel> {
-    const user = new User();
-    user.name = addAccount.name;
-    user.lastName = addAccount.lastName;
-    user.email = addAccount.email;
-    user.password = addAccount.password;
-    const userRepository = getRepository(User);
-    await userRepository.save(user);
+    const newUser = this.userRepository.create(addAccount);
+    const user = await this.userRepository.save(newUser);
     return user;
   }
 }
