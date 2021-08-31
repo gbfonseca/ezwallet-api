@@ -8,7 +8,6 @@ export default {
     '!<rootDir>/src/**/migrations/**',
   ],
   coverageDirectory: 'coverage',
-  coverageProvider: 'babel',
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest',
