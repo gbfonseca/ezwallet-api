@@ -6,7 +6,7 @@ import {
   AddUserModel,
 } from './db-add-user-adapter-protocols';
 
-export class DbUserAdapter implements AddUser {
+export class DbAddUserAdapter implements AddUser {
   constructor(
     private readonly encrypter: Encrypter,
     private readonly addUserRepository: AddUserRepository,

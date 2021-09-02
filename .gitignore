@@ -3,3 +3,5 @@ dist/
 .vscode
 coverage
 test.sql
+.env
+ormconfig.ts

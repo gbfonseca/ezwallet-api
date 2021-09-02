@@ -4,10 +4,10 @@ import {
   AddUserRepository,
   UserModel,
 } from './db-add-user-adapter-protocols';
-import { DbUserAdapter } from './db-add-user-adapter';
+import { DbAddUserAdapter } from './db-add-user-adapter';
 
 interface SutTypes {
-  sut: DbUserAdapter;
+  sut: DbAddUserAdapter;
   encrypterAdapterStub: Encrypter;
   addUserRepositoryStub: AddUserRepository;
 }
@@ -40,12 +40,12 @@ const makeEncrypterAdapter = () => {
 const makeSut = (): SutTypes => {
   const addUserRepositoryStub = makeAddUserRepository();
   const encrypterAdapterStub = makeEncrypterAdapter();
-  const sut = new DbUserAdapter(encrypterAdapterStub, addUserRepositoryStub);
+  const sut = new DbAddUserAdapter(encrypterAdapterStub, addUserRepositoryStub);
 
   return { sut, encrypterAdapterStub, addUserRepositoryStub };
 };
 
-describe('DbUserAdapter Use case', () => {
+describe('DbAddUserAdapter Use case', () => {
   test('should calls DbAddUserAdapter with correct values', async () => {
     const { sut } = makeSut();
     const addSpy = jest.spyOn(sut, 'add');
@@ -91,7 +91,7 @@ describe('DbUserAdapter Use case', () => {
     expect(hashedPassword).toBe('hashed_password');
   });
 
-  test('should DbUserAdapter returns an user on success', async () => {
+  test('should DbAddUserAdapter returns an user on success', async () => {
     const { sut } = makeSut();
     const userData = {
       name: 'valid_name',
@@ -111,7 +111,7 @@ describe('DbUserAdapter Use case', () => {
     });
   });
 
-  test('should DbUserAdapter throws if encrypter throws', async () => {
+  test('should DbAddUserAdapter throws if encrypter throws', async () => {
     const { sut, encrypterAdapterStub } = makeSut();
     jest
       .spyOn(encrypterAdapterStub, 'encrypt')
@@ -130,7 +130,7 @@ describe('DbUserAdapter Use case', () => {
     await expect(promise).rejects.toThrow();
   });
 
-  test('should DbUserAdapter throws if AddUserRepository throws', async () => {
+  test('should DbAddUserAdapter throws if AddUserRepository throws', async () => {
     const { sut, addUserRepositoryStub } = makeSut();
     jest
       .spyOn(addUserRepositoryStub, 'add')

@@ -25,6 +25,7 @@ export default class SignUpController implements Controller {
       ];
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
+          console.log();
           return badRequest(new MissingParamError(field));
         }
       }
