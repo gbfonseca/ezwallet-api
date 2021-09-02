@@ -9,7 +9,7 @@ describe('userTypeormRepository', () => {
   beforeAll(async () => {
     await TypeormHelper.connect({
       type: 'sqlite',
-      database: 'test.sql',
+      database: ':memory:',
       entities: ['src/infra/db/typeorm/entities/**.ts'],
       migrations: ['src/infra/db/typeorm/migrations/**.ts'],
       migrationsRun: true,
