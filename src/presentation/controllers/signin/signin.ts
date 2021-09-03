@@ -26,10 +26,9 @@ export class SignInController implements Controller {
         return badRequest(new InvalidParamError('email'));
       }
 
-      const authenticated = this.authentication.checkCredentials(
+      const authenticated = await this.authentication.checkCredentials(
         httpRequest.body,
       );
-
       return ok(authenticated);
     } catch (error) {
       return serverError();
