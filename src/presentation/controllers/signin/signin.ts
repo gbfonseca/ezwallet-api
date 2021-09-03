@@ -1,6 +1,6 @@
 import { InvalidParamError } from './../../errors/invalid-param-error';
 import { EmailValidator } from './../../protocols/email-validator';
-import { badRequest } from './../../helpers/http-helper';
+import { badRequest, serverError } from './../../helpers/http-helper';
 import { MissingParamError } from './../../errors/missing-param-error';
 import { HttpRequest, HttpResponse } from '../../protocols';
 import { Controller } from './../../protocols/controller';
@@ -24,7 +24,7 @@ export class SignInController implements Controller {
 
       return new Promise((resolve) => resolve(null));
     } catch (error) {
-      console.error(error);
+      return serverError();
     }
   }
 }
