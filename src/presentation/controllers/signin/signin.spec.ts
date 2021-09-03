@@ -1,12 +1,43 @@
+import { SignInController } from './signin';
 import { EmailValidator } from './../../protocols/email-validator';
 import { MissingParamError } from './../../errors/missing-param-error';
-import { SignInController } from './signin';
 import { InvalidParamError } from '../../errors';
+import {
+  AuthenticatedUser,
+  Authentication,
+  Credentials,
+} from '../../../domain/usecases/authentication';
 
 interface SutTypes {
   sut: SignInController;
   emailValidatorStub: EmailValidator;
+  authenticationStub: Authentication;
 }
+
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async checkCredentials(
+      credentials: Credentials,
+    ): Promise<AuthenticatedUser> {
+      const { email, password } = credentials;
+      const fakeUser = {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email,
+        password,
+      };
+      const fakeToken = 'any_token';
+      return {
+        user: fakeUser,
+        token: fakeToken,
+      };
+    }
+  }
+  const authentication = new AuthenticationStub();
+
+  return authentication;
+};
 
 const makeEmailValidatorStub = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -20,8 +51,9 @@ const makeEmailValidatorStub = (): EmailValidator => {
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub();
-  const sut = new SignInController(emailValidatorStub);
-  return { sut, emailValidatorStub };
+  const authenticationStub = makeAuthenticationStub();
+  const sut = new SignInController(emailValidatorStub, authenticationStub);
+  return { sut, emailValidatorStub, authenticationStub };
 };
 
 describe('SignIn Controller', () => {
@@ -93,8 +125,23 @@ describe('SignIn Controller', () => {
         password: 'any_password',
       },
     };
-
     await sut.handle(httpRequest);
     expect(emailValidatorSpy).toHaveBeenCalledWith(httpRequest.body.email);
+  });
+
+  test('should calls Authentication with correct data', async () => {
+    const { sut, authenticationStub } = makeSut();
+    const authenticationSpy = jest.spyOn(
+      authenticationStub,
+      'checkCredentials',
+    );
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+    await sut.handle(httpRequest);
+    expect(authenticationSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
