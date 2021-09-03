@@ -144,4 +144,21 @@ describe('SignIn Controller', () => {
     await sut.handle(httpRequest);
     expect(authenticationSpy).toHaveBeenCalledWith(httpRequest.body);
   });
+
+  test('should returns 500 if Authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest
+      .spyOn(authenticationStub, 'checkCredentials')
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+  });
 });
