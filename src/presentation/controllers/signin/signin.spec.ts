@@ -67,4 +67,20 @@ describe('SignIn Controller', () => {
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new InvalidParamError('email'));
   });
+
+  test('should returns 500 if EmailValidator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementation(() => {
+      throw new Error();
+    });
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+  });
 });
