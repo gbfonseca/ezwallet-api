@@ -1,11 +1,15 @@
+import { Authentication } from './../../../domain/usecases/authentication';
 import { InvalidParamError } from './../../errors/invalid-param-error';
 import { EmailValidator } from './../../protocols/email-validator';
-import { badRequest, serverError } from './../../helpers/http-helper';
+import { badRequest, serverError, ok } from './../../helpers/http-helper';
 import { MissingParamError } from './../../errors/missing-param-error';
 import { HttpRequest, HttpResponse } from '../../protocols';
 import { Controller } from './../../protocols/controller';
 export class SignInController implements Controller {
-  constructor(private readonly emailValidator: EmailValidator) {}
+  constructor(
+    private readonly emailValidator: EmailValidator,
+    private readonly authentication: Authentication,
+  ) {}
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -22,7 +26,11 @@ export class SignInController implements Controller {
         return badRequest(new InvalidParamError('email'));
       }
 
-      return new Promise((resolve) => resolve(null));
+      const authenticated = this.authentication.checkCredentials(
+        httpRequest.body,
+      );
+
+      return ok(authenticated);
     } catch (error) {
       return serverError();
     }
