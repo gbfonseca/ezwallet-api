@@ -83,4 +83,18 @@ describe('SignIn Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
   });
+
+  test('should calls EmailValidator with correct data', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    const emailValidatorSpy = jest.spyOn(emailValidatorStub, 'isValid');
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    await sut.handle(httpRequest);
+    expect(emailValidatorSpy).toHaveBeenCalledWith(httpRequest.body.email);
+  });
 });
