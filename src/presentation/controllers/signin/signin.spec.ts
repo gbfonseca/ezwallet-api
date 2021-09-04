@@ -1,12 +1,12 @@
 import { SignInController } from './signin';
 import { EmailValidator } from './../../protocols/email-validator';
-import { MissingParamError } from './../../errors/missing-param-error';
-import { InvalidParamError } from '../../errors';
 import {
+  MissingParamError,
+  InvalidParamError,
   AuthenticatedUser,
   Authentication,
   Credentials,
-} from '../../../domain/usecases/authentication';
+} from './signin-protocols';
 
 interface SutTypes {
   sut: SignInController;
