@@ -4,18 +4,21 @@ import {
   Authentication,
   Credentials,
 } from '../../../domain/usecases/authentication';
+import { TokenGenerator } from '../../protocols/token-generator';
 
 export class DbAuthenticationAdapter implements Authentication {
   constructor(
     private readonly findUserByEmailRepository: FindUserByEmailRepository,
+    private readonly tokenGenerator: TokenGenerator,
   ) {}
 
   async checkCredentials(credentials: Credentials): Promise<AuthenticatedUser> {
     const { email } = credentials;
     const user = await this.findUserByEmailRepository.find(email);
+    const token = await this.tokenGenerator.generate(user.id);
     return {
       user,
-      token: 'any_token',
+      token,
     };
   }
 }
