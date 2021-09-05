@@ -2,10 +2,12 @@ import { FindUserByEmailRepository } from '../../protocols/find-user-by-email-re
 import { UserModel } from '../user/db-add-user-adapter-protocols';
 import { DbAuthenticationAdapter } from './db-authentication-adapter';
 import { TokenGenerator } from '../../protocols/token-generator';
+import { Decrypter } from '../../protocols/decrypter';
 
 interface SutTypes {
   sut: DbAuthenticationAdapter;
   findUserByEmailRepositoryStub: FindUserByEmailRepository;
+  decrypterAdapterStub: Decrypter;
   tokenGeneratorStub: TokenGenerator;
 }
 
@@ -29,6 +31,16 @@ const makeFindUserByEmailRepository = (): FindUserByEmailRepository => {
   return findUserByEmailRepositoryStub;
 };
 
+const makeDecrypterAdapter = (): Decrypter => {
+  class DecrypterAdapterStub implements Decrypter {
+    async decrypt(password: string, passwordHash: string): Promise<boolean> {
+      return new Promise((resolve) => resolve(true));
+    }
+  }
+
+  return new DecrypterAdapterStub();
+};
+
 const makeTokenGenerator = (): TokenGenerator => {
   class TokenGeneratorStub implements TokenGenerator {
     async generate(id: string): Promise<string> {
@@ -42,12 +54,19 @@ const makeTokenGenerator = (): TokenGenerator => {
 const makeSut = (): SutTypes => {
   const findUserByEmailRepositoryStub = makeFindUserByEmailRepository();
   const tokenGeneratorStub = makeTokenGenerator();
+  const decrypterAdapterStub = makeDecrypterAdapter();
   const sut = new DbAuthenticationAdapter(
     findUserByEmailRepositoryStub,
+    decrypterAdapterStub,
     tokenGeneratorStub,
   );
 
-  return { sut, findUserByEmailRepositoryStub, tokenGeneratorStub };
+  return {
+    sut,
+    findUserByEmailRepositoryStub,
+    tokenGeneratorStub,
+    decrypterAdapterStub,
+  };
 };
 
 describe('DbAuthentication Adapter', () => {
@@ -102,5 +121,22 @@ describe('DbAuthentication Adapter', () => {
     const httpResponse = sut.checkCredentials(httpRequest.body);
 
     await expect(httpResponse).rejects.toThrow();
+  });
+
+  test('should calls DecrypterAdapter with correct values', async () => {
+    const { sut, decrypterAdapterStub } = makeSut();
+    const decrypterSpy = jest.spyOn(decrypterAdapterStub, 'decrypt');
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+    const httpResponse = await sut.checkCredentials(httpRequest.body);
+
+    expect(decrypterSpy).toHaveBeenCalledWith(
+      httpRequest.body.password,
+      httpResponse.user.password,
+    );
   });
 });
