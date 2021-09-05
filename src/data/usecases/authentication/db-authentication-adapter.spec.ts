@@ -144,11 +144,7 @@ describe('DbAuthentication Adapter', () => {
     const { sut, decrypterAdapterStub } = makeSut();
     jest
       .spyOn(decrypterAdapterStub, 'decrypt')
-      .mockReturnValueOnce(
-        new Promise((resolve, reject) =>
-          reject(new Error('Email/Password values incorrect')),
-        ),
-      );
+      .mockReturnValueOnce(new Promise((resolve) => resolve(false)));
     const httpRequest = {
       body: {
         email: 'any_email@mail.com',
@@ -156,9 +152,31 @@ describe('DbAuthentication Adapter', () => {
       },
     };
     const httpResponse = sut.checkCredentials(httpRequest.body);
-
     await expect(httpResponse).rejects.toThrow(
       'Email/Password values incorrect',
     );
+  });
+
+  test('should an user and token on success', async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const httpResponse = await sut.checkCredentials(httpRequest.body);
+
+    expect(httpResponse).toEqual({
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+      token: 'any_token',
+    });
   });
 });
