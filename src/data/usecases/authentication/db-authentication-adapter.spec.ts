@@ -139,4 +139,26 @@ describe('DbAuthentication Adapter', () => {
       httpResponse.user.password,
     );
   });
+
+  test('should return an error with password not equal decrypt password hashed', async () => {
+    const { sut, decrypterAdapterStub } = makeSut();
+    jest
+      .spyOn(decrypterAdapterStub, 'decrypt')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) =>
+          reject(new Error('Email/Password values incorrect')),
+        ),
+      );
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+    const httpResponse = sut.checkCredentials(httpRequest.body);
+
+    await expect(httpResponse).rejects.toThrow(
+      'Email/Password values incorrect',
+    );
+  });
 });
