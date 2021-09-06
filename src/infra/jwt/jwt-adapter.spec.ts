@@ -26,4 +26,20 @@ describe('JWT Adapter', () => {
 
     await expect(token).rejects.toThrow();
   });
+
+  test('should calls jsonwebtoken with correct values', async () => {
+    const sut = makeSut();
+    const jwtSpy = jest.spyOn(jwt, 'sign');
+    const userId = 'any_id';
+
+    await sut.generate(userId);
+
+    expect(jwtSpy).toHaveBeenCalledWith(
+      { id: userId },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: '7d',
+      },
+    );
+  });
 });
