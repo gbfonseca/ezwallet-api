@@ -13,7 +13,7 @@ interface SutTypes {
 
 const makeFindUserByEmailRepository = (): FindUserByEmailRepository => {
   class FindUserByEmailRepositoryStub implements FindUserByEmailRepository {
-    async find(email: string): Promise<UserModel> {
+    async findByEmail(email: string): Promise<UserModel> {
       const fakeUser = {
         id: 'any_id',
         name: 'any_name',
@@ -91,7 +91,7 @@ describe('DbAuthentication Adapter', () => {
   test('should throws if findUserByEmailRepository throws', async () => {
     const { sut, findUserByEmailRepositoryStub } = makeSut();
     jest
-      .spyOn(findUserByEmailRepositoryStub, 'find')
+      .spyOn(findUserByEmailRepositoryStub, 'findByEmail')
       .mockReturnValue(new Promise((resolve, reject) => reject(new Error())));
     const httpRequest = {
       body: {
