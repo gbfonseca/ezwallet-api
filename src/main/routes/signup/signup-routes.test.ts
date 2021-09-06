@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { TypeormHelper } from '../../infra/db/typeorm/helpers/typeorm-helper';
-import app from '../config/app';
+import { TypeormHelper } from '../../../infra/db/typeorm/helpers/typeorm-helper';
+import app from '../../config/app';
 
 describe('SignUp Route', () => {
   beforeAll(async () => {

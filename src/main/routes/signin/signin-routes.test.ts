@@ -1,6 +1,6 @@
-import { TypeormHelper } from './../../infra/db/typeorm/helpers/typeorm-helper';
+import { TypeormHelper } from '../../../infra/db/typeorm/helpers/typeorm-helper';
 import request from 'supertest';
-import app from '../config/app';
+import app from '../../config/app';
 describe('SignIn Route', () => {
   beforeAll(async () => {
     await TypeormHelper.connect({
