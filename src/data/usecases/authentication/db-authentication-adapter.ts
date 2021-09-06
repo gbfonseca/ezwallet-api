@@ -16,7 +16,7 @@ export class DbAuthenticationAdapter implements Authentication {
 
   async checkCredentials(credentials: Credentials): Promise<AuthenticatedUser> {
     const { email, password } = credentials;
-    const user = await this.findUserByEmailRepository.find(email);
+    const user = await this.findUserByEmailRepository.findByEmail(email);
 
     const matchedPassword = await this.decrypter.decrypt(
       password,
