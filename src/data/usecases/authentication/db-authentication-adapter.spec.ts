@@ -2,12 +2,12 @@ import { FindUserByEmailRepository } from '../../protocols/find-user-by-email-re
 import { UserModel } from '../user/db-add-user-adapter-protocols';
 import { DbAuthenticationAdapter } from './db-authentication-adapter';
 import { TokenGenerator } from '../../protocols/token-generator';
-import { Decrypter } from '../../protocols/decrypter';
+import { Encrypter } from '../../protocols/encrypter';
 
 interface SutTypes {
   sut: DbAuthenticationAdapter;
   findUserByEmailRepositoryStub: FindUserByEmailRepository;
-  decrypterAdapterStub: Decrypter;
+  encrypterAdapterStub: Encrypter;
   tokenGeneratorStub: TokenGenerator;
 }
 
@@ -31,14 +31,17 @@ const makeFindUserByEmailRepository = (): FindUserByEmailRepository => {
   return findUserByEmailRepositoryStub;
 };
 
-const makeDecrypterAdapter = (): Decrypter => {
-  class DecrypterAdapterStub implements Decrypter {
+const makeEncrypterAdapter = (): Encrypter => {
+  class EncrypterAdapterStub implements Encrypter {
+    encrypt(value: string): Promise<string> {
+      throw new Error('Method not implemented.');
+    }
     async decrypt(password: string, passwordHash: string): Promise<boolean> {
       return new Promise((resolve) => resolve(true));
     }
   }
 
-  return new DecrypterAdapterStub();
+  return new EncrypterAdapterStub();
 };
 
 const makeTokenGenerator = (): TokenGenerator => {
@@ -54,10 +57,10 @@ const makeTokenGenerator = (): TokenGenerator => {
 const makeSut = (): SutTypes => {
   const findUserByEmailRepositoryStub = makeFindUserByEmailRepository();
   const tokenGeneratorStub = makeTokenGenerator();
-  const decrypterAdapterStub = makeDecrypterAdapter();
+  const encrypterAdapterStub = makeEncrypterAdapter();
   const sut = new DbAuthenticationAdapter(
     findUserByEmailRepositoryStub,
-    decrypterAdapterStub,
+    encrypterAdapterStub,
     tokenGeneratorStub,
   );
 
@@ -65,7 +68,7 @@ const makeSut = (): SutTypes => {
     sut,
     findUserByEmailRepositoryStub,
     tokenGeneratorStub,
-    decrypterAdapterStub,
+    encrypterAdapterStub,
   };
 };
 
@@ -124,8 +127,8 @@ describe('DbAuthentication Adapter', () => {
   });
 
   test('should calls DecrypterAdapter with correct values', async () => {
-    const { sut, decrypterAdapterStub } = makeSut();
-    const decrypterSpy = jest.spyOn(decrypterAdapterStub, 'decrypt');
+    const { sut, encrypterAdapterStub } = makeSut();
+    const decrypterSpy = jest.spyOn(encrypterAdapterStub, 'decrypt');
     const httpRequest = {
       body: {
         email: 'any_email@mail.com',
@@ -141,9 +144,9 @@ describe('DbAuthentication Adapter', () => {
   });
 
   test('should return an error with password not equal decrypt password hashed', async () => {
-    const { sut, decrypterAdapterStub } = makeSut();
+    const { sut, encrypterAdapterStub } = makeSut();
     jest
-      .spyOn(decrypterAdapterStub, 'decrypt')
+      .spyOn(encrypterAdapterStub, 'decrypt')
       .mockReturnValueOnce(new Promise((resolve) => resolve(false)));
     const httpRequest = {
       body: {

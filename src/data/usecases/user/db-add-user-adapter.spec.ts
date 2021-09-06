@@ -30,6 +30,9 @@ const makeAddUserRepository = () => {
 
 const makeEncrypterAdapter = () => {
   class EncrypterAdapterStub implements Encrypter {
+    decrypt(password: string, passwordHash: string): Promise<boolean> {
+      throw new Error('Method not implemented.');
+    }
     async encrypt(value: string): Promise<string> {
       return new Promise((resolve) => resolve('hashed_password'));
     }

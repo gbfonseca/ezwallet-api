@@ -5,12 +5,12 @@ import {
   Credentials,
 } from '../../../domain/usecases/authentication';
 import { TokenGenerator } from '../../protocols/token-generator';
-import { Decrypter } from '../../protocols/decrypter';
+import { Encrypter } from '../../protocols/encrypter';
 
 export class DbAuthenticationAdapter implements Authentication {
   constructor(
     private readonly findUserByEmailRepository: FindUserByEmailRepository,
-    private readonly decrypter: Decrypter,
+    private readonly encrypter: Encrypter,
     private readonly tokenGenerator: TokenGenerator,
   ) {}
 
@@ -18,7 +18,7 @@ export class DbAuthenticationAdapter implements Authentication {
     const { email, password } = credentials;
     const user = await this.findUserByEmailRepository.findByEmail(email);
 
-    const matchedPassword = await this.decrypter.decrypt(
+    const matchedPassword = await this.encrypter.decrypt(
       password,
       user.password,
     );

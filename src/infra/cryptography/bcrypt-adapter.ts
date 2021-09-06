@@ -1,8 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Encrypter } from '../../data/protocols/encrypter';
-import { Decrypter } from '../../data/protocols/decrypter';
 
-export class BcryptAdapter implements Encrypter, Decrypter {
+export class BcryptAdapter implements Encrypter {
   constructor(private readonly salt: number) {}
 
   async encrypt(value: string): Promise<string> {
