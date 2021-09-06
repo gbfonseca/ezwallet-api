@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 export default {
+  node_env: process.env.NODE_ENV,
   port: process.env.PORT,
   database: {
     type: process.env.DB_TYPE,
@@ -13,8 +14,8 @@ export default {
     migrations: [process.env.DB_MIGRATIONS],
     synchronize: true,
     cli: {
-      migrationsDir: '../../../infra/db/typeorm/migrations/',
-      entitiesDir: '../../../infra/db/typeorm/entities/',
+      migrationsDir: process.env.DB_ENTITIES_DIR,
+      entitiesDir: process.env.DB_MIGRATIONS_DIR,
     },
   },
 };

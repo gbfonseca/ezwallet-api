@@ -4,9 +4,10 @@
     "module": "CommonJS",
     "target": "ES2019",
     "esModuleInterop": true,
-    "allowJs": true,
     "experimentalDecorators": true,
     "strict": false,
-    "emitDecoratorMetadata": true
-  }
+    "emitDecoratorMetadata": true,
+  },
+
+
 }
