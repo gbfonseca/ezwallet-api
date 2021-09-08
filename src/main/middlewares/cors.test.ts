@@ -10,7 +10,7 @@ describe('Cors Middleware', () => {
     await request(app)
       .get('/cors_test')
       .expect('access-control-allow-methods', '*')
-      .expect('access-control-allow-header', '*')
+      .expect('access-control-allow-headers', '*')
       .expect('access-control-allow-origin', '*');
   });
 });
