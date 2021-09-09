@@ -18,6 +18,10 @@ export class DbAuthenticationAdapter implements Authentication {
     const { email, password } = credentials;
     const user = await this.findUserByEmailRepository.findByEmail(email);
 
+    if (!user) {
+      throw new Error('Email/Password values incorrect');
+    }
+
     const matchedPassword = await this.encrypter.decrypt(
       password,
       user.password,
