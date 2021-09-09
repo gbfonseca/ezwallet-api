@@ -8,6 +8,8 @@ import {
   HttpRequest,
   HttpResponse,
   Controller,
+  notFoundError,
+  NotFoundDataError,
 } from './signin-protocols';
 import { EmailValidator } from '../signup/signup-protocols';
 
@@ -35,9 +37,16 @@ export class SignInController implements Controller {
       const authenticated = await this.authentication.checkCredentials(
         httpRequest.body,
       );
+
       return ok(authenticated);
     } catch (error) {
-      return serverError();
+      if (error.message === 'Email/Password values incorrect') {
+        return notFoundError(
+          new NotFoundDataError('Email/Password values incorrect'),
+        );
+      } else {
+        return serverError();
+      }
     }
   }
 }
