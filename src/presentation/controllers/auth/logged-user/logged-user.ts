@@ -1,6 +1,7 @@
 import {
   badRequest,
   notFoundError,
+  ok,
   serverError,
 } from './../../../helpers/http-helper';
 import { HttpRequest, HttpResponse } from '../../../protocols/http';
@@ -22,7 +23,7 @@ export class LoggedUser implements Controller {
         return notFoundError(new Error('User not found or invalid Token'));
       }
 
-      return new Promise((resolve) => resolve(null));
+      return ok(user);
     } catch (error) {
       return serverError();
     }
