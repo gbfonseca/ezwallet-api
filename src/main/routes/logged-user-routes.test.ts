@@ -1,8 +1,16 @@
+import { TypeormHelper } from './../../infra/db/typeorm/helpers/typeorm-helper';
 import request from 'supertest';
-import { TypeormHelper } from '../../infra/db/typeorm/helpers/typeorm-helper';
 import app from '../config/app';
 
-describe('SignUp Route', () => {
+const fakeUser = {
+  name: 'Gabriel',
+  lastName: 'Fonseca',
+  email: 'userx@mail.com',
+  password: '123123',
+  confirmPassword: '123123',
+};
+
+describe('LoggedUser route', () => {
   beforeAll(async () => {
     await TypeormHelper.connect({
       type: 'sqlite',
@@ -17,24 +25,27 @@ describe('SignUp Route', () => {
     });
   });
 
-  afterAll(() => {
-    TypeormHelper.client.close();
+  afterAll(async () => {
+    await TypeormHelper.client.close();
   });
 
   beforeEach(async () => {
     await TypeormHelper.clear();
   });
+  test('should return an user', async () => {
+    await request(app).post('/api/auth/signup').send(fakeUser).expect(200);
 
-  test('should SignUpRoute returns an account', async () => {
-    await request(app)
-      .post('/api/auth/signup')
+    const { body } = await request(app)
+      .post('/api/auth/signin')
       .send({
-        name: 'Gabriel',
-        lastName: 'Fonseca',
         email: 'userx@mail.com',
         password: '123123',
-        confirmPassword: '123123',
       })
+      .expect(200);
+
+    await request(app)
+      .get('/api/auth/logged-user')
+      .set('Authorization', `Bearer ${body.token}`)
       .expect(200);
   });
 });
