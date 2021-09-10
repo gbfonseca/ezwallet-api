@@ -11,11 +11,10 @@ export class LoggedUser implements Controller {
   async handle(httpRequest: HttpRequest): Promise<HttpResponse<UserModel>> {
     try {
       const {
-        headers: { Authorization },
+        headers: { authorization },
         user,
       } = httpRequest;
-
-      if (!Authorization) {
+      if (!authorization) {
         return badRequest(new Error('Authorization must be provided'));
       }
 
