@@ -1,5 +1,5 @@
 import { SignInController } from './signin';
-import { EmailValidator } from './../../protocols/email-validator';
+import { EmailValidator } from './../../../protocols/email-validator';
 import {
   MissingParamError,
   InvalidParamError,
