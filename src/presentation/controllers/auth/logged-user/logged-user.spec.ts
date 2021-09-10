@@ -17,7 +17,7 @@ describe('LoggedUser Controller', () => {
     const httpRequest: HttpRequest = {
       body: {},
       headers: {
-        Authorization: 'Bearer token',
+        authorization: 'Bearer token',
       },
     };
 
@@ -60,7 +60,7 @@ describe('LoggedUser Controller', () => {
     const httpRequest: HttpRequest = {
       body: {},
       headers: {
-        Authorization: 'Bearer token',
+        authorization: 'Bearer token',
       },
     };
 
@@ -75,7 +75,7 @@ describe('LoggedUser Controller', () => {
     const httpRequest: HttpRequest = {
       body: {},
       headers: {
-        Authorization: 'Bearer token',
+        authorization: 'Bearer token',
       },
       user: {
         id: 'any_id',
