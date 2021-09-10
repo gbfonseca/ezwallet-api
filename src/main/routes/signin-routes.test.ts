@@ -27,7 +27,7 @@ describe('SignIn Route', () => {
 
   test('should SignIn Route returns an user and token', async () => {
     await request(app)
-      .post('/api/signup')
+      .post('/api/auth/signup')
       .send({
         name: 'Gabriel',
         lastName: 'Fonseca',
@@ -38,7 +38,7 @@ describe('SignIn Route', () => {
       .expect(200);
 
     await request(app)
-      .post('/api/signin')
+      .post('/api/auth/signin')
       .send({
         email: 'userx@mail.com',
         password: '123123',
