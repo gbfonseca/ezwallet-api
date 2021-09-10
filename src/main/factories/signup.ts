@@ -1,7 +1,7 @@
 import { UserTypeormRepository } from './../../infra/db/typeorm/repositories/user/user';
 import { DbAddUserAdapter } from './../../data/usecases/user/db-add-user-adapter';
 import { BcryptAdapter } from './../../infra/cryptography/bcrypt-adapter';
-import SignUpController from '../../presentation/controllers/signup/signup';
+import SignUpController from '../../presentation/controllers/auth/signup/signup';
 import { EmailValidatorAdapter } from '../../utils/EmailValidatorAdapter/email-validator-adapter';
 
 export const makeSignUpController = (): SignUpController => {

@@ -4,12 +4,10 @@ import {
   AddUser,
   UserModel,
   AddUserModel,
-} from './signup-protocols';
-import {
   MissingParamError,
   InvalidParamError,
   ServerError,
-} from '../../errors';
+} from './signup-protocols';
 
 interface SutTypes {
   sut: SignUpController;
