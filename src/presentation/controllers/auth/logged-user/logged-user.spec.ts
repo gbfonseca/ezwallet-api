@@ -52,4 +52,19 @@ describe('LoggedUser Controller', () => {
 
     expect(httpResponse.statusCode).toBe(500);
   });
+
+  test('should returns 404 if user not found', async () => {
+    const sut = makeSut();
+
+    const httpRequest = {
+      body: {},
+      headers: {
+        Authorization: 'Bearer token',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(404);
+  });
 });
