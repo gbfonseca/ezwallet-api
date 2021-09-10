@@ -1,3 +1,4 @@
+import { HttpRequest } from './../../../protocols/http';
 import { serverError } from '../../../helpers/http-helper';
 import { LoggedUser } from './logged-user';
 
@@ -13,7 +14,7 @@ describe('LoggedUser Controller', () => {
 
     const sutSpy = jest.spyOn(sut, 'handle');
 
-    const httpRequest = {
+    const httpRequest: HttpRequest = {
       body: {},
       headers: {
         Authorization: 'Bearer token',
@@ -28,7 +29,7 @@ describe('LoggedUser Controller', () => {
   test('should returns 400 if no token provided', async () => {
     const sut = makeSut();
 
-    const httpRequest = {
+    const httpRequest: HttpRequest = {
       body: {},
       headers: {},
     };
@@ -43,7 +44,7 @@ describe('LoggedUser Controller', () => {
     jest.spyOn(sut, 'handle').mockImplementationOnce(async () => {
       return new Promise((resolve) => resolve(serverError()));
     });
-    const httpRequest = {
+    const httpRequest: HttpRequest = {
       body: {},
       headers: {},
     };
@@ -56,7 +57,7 @@ describe('LoggedUser Controller', () => {
   test('should returns 404 if user not found', async () => {
     const sut = makeSut();
 
-    const httpRequest = {
+    const httpRequest: HttpRequest = {
       body: {},
       headers: {
         Authorization: 'Bearer token',
@@ -66,5 +67,32 @@ describe('LoggedUser Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse.statusCode).toBe(404);
+  });
+
+  test('should returns an user on success', async () => {
+    const sut = makeSut();
+
+    const httpRequest: HttpRequest = {
+      body: {},
+      headers: {
+        Authorization: 'Bearer token',
+      },
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.body.id).toBeTruthy();
+    expect(httpResponse.body.name).toBeTruthy();
+    expect(httpResponse.body.lastName).toBeTruthy();
+    expect(httpResponse.body.email).toBeTruthy();
+    expect(httpResponse.body.password).toBeTruthy();
   });
 });
