@@ -23,4 +23,17 @@ describe('LoggedUser Controller', () => {
 
     expect(sutSpy).toHaveBeenCalledWith(httpRequest);
   });
+
+  test('should returns 400 if no token provided', async () => {
+    const sut = makeSut();
+
+    const httpRequest = {
+      body: {},
+      headers: {},
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
