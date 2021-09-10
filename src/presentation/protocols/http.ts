@@ -1,8 +1,14 @@
-export interface HttpResponse {
+import { UserModel } from '../../domain/models/user';
+
+export interface HttpResponse<T = any> {
   statusCode: number;
-  body: any;
+  body: T;
 }
 
-export interface HttpRequest {
-  body?: any;
+export interface HttpRequest<T = any> {
+  body?: T;
+  headers?: {
+    authorization?: string;
+  };
+  user?: UserModel;
 }
