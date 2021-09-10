@@ -1,3 +1,4 @@
+import { serverError } from '../../../helpers/http-helper';
 import { LoggedUser } from './logged-user';
 
 const makeSut = (): LoggedUser => {
@@ -35,5 +36,20 @@ describe('LoggedUser Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse.statusCode).toBe(400);
+  });
+
+  test('should returns 500 if LoggedUser throws', async () => {
+    const sut = makeSut();
+    jest.spyOn(sut, 'handle').mockImplementationOnce(async () => {
+      return new Promise((resolve) => resolve(serverError()));
+    });
+    const httpRequest = {
+      body: {},
+      headers: {},
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
   });
 });
