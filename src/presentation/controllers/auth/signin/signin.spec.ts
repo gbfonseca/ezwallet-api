@@ -1,5 +1,5 @@
 import { SignInController } from './signin';
-import { EmailValidator } from './../../protocols/email-validator';
+import { EmailValidator } from './../../../protocols/email-validator';
 import {
   MissingParamError,
   InvalidParamError,
@@ -7,6 +7,7 @@ import {
   Authentication,
   Credentials,
 } from './signin-protocols';
+import { NotFoundDataError } from '../signup/signup-protocols';
 
 interface SutTypes {
   sut: SignInController;
@@ -98,6 +99,29 @@ describe('SignIn Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
     expect(httpResponse.body).toEqual(new InvalidParamError('email'));
+  });
+
+  test('should returns 404 no user found', async () => {
+    const { sut, authenticationStub } = makeSut();
+    jest
+      .spyOn(authenticationStub, 'checkCredentials')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) =>
+          reject(new Error('Email/Password values incorrect')),
+        ),
+      );
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(404);
+    expect(httpResponse.body).toEqual(
+      new NotFoundDataError('Email/Password values incorrect'),
+    );
   });
 
   test('should returns 500 if EmailValidator throws', async () => {
