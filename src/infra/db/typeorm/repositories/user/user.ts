@@ -3,6 +3,7 @@ import { UserModel } from '../../../../../domain/models/user';
 import { AddUserModel } from '../../../../../domain/usecases/add-user';
 import { AddUserRepository } from '../../../../../data/protocols/add-user-repository';
 import { User } from '../../entities/user.entity';
+import { getRepository, Repository } from 'typeorm';
 export class UserTypeormRepository
   implements AddUserRepository, FindUserByEmailRepository
 {
@@ -13,6 +14,7 @@ export class UserTypeormRepository
     newUser.email = addUser.email;
     newUser.password = addUser.password;
     const user = await newUser.save();
+    delete user.password;
     return user;
   }
 
@@ -21,8 +23,15 @@ export class UserTypeormRepository
       where: {
         email,
       },
+      select: this.getCols<User>(getRepository(User)),
     });
 
     return user;
+  }
+
+  private getCols<T>(repository: Repository<T>): (keyof T)[] {
+    return repository.metadata.columns.map(
+      (col) => col.propertyName,
+    ) as (keyof T)[];
   }
 }

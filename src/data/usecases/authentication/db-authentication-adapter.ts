@@ -31,6 +31,7 @@ export class DbAuthenticationAdapter implements Authentication {
       throw new Error('Email/Password values incorrect');
     }
 
+    delete user.password;
     const token = await this.tokenGenerator.generate(user.id);
     return {
       user,
