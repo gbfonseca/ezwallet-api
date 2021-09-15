@@ -44,7 +44,6 @@ describe('userTypeormRepository', () => {
     expect(user.name).toBe('any_name');
     expect(user.lastName).toBe('any_lastName');
     expect(user.email).toBe('any_email@mail.com');
-    expect(user.password).toBe('any_password');
   });
 
   test('should return user if email of any user exists', async () => {

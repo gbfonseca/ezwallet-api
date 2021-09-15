@@ -126,23 +126,6 @@ describe('DbAuthentication Adapter', () => {
     await expect(httpResponse).rejects.toThrow();
   });
 
-  test('should calls DecrypterAdapter with correct values', async () => {
-    const { sut, encrypterAdapterStub } = makeSut();
-    const decrypterSpy = jest.spyOn(encrypterAdapterStub, 'decrypt');
-    const httpRequest = {
-      body: {
-        email: 'any_email@mail.com',
-        password: 'any_password',
-      },
-    };
-    const httpResponse = await sut.checkCredentials(httpRequest.body);
-
-    expect(decrypterSpy).toHaveBeenCalledWith(
-      httpRequest.body.password,
-      httpResponse.user.password,
-    );
-  });
-
   test('should return an error with password not equal decrypt password hashed', async () => {
     const { sut, encrypterAdapterStub } = makeSut();
     jest
@@ -177,7 +160,6 @@ describe('DbAuthentication Adapter', () => {
         name: 'any_name',
         lastName: 'any_lastName',
         email: 'any_email@mail.com',
-        password: 'any_password',
       },
       token: 'any_token',
     });

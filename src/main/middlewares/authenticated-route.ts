@@ -17,7 +17,7 @@ export default (req: any, res: Response, next: NextFunction): void => {
     async (err: Error, payload: PayloadType) => {
       if (err) {
         return res
-          .status(500)
+          .status(400)
           .json({ auth: false, message: 'Invalid token provided' });
       }
       const user = await User.findOne(payload.id);
