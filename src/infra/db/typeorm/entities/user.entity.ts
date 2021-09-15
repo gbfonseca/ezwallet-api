@@ -22,7 +22,7 @@ export class User extends BaseEntity implements UserModel {
   @Column({ type: 'varchar', length: 256, unique: true, nullable: false })
   email: string;
 
-  @Column({ type: 'varchar', length: 512, nullable: false })
+  @Column({ type: 'varchar', length: 512, nullable: false, select: false })
   password: string;
 
   @CreateDateColumn()
