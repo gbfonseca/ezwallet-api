@@ -40,10 +40,8 @@ export class SignInController implements Controller {
 
       return ok(authenticated);
     } catch (error) {
-      if (error.message === 'Email/Password values incorrect') {
-        return notFoundError(
-          new NotFoundDataError('Email/Password values incorrect'),
-        );
+      if (error.message === 'E-mail/Senha incorretos.') {
+        return notFoundError(new NotFoundDataError('E-mail/Senha incorretos.'));
       } else {
         return serverError();
       }

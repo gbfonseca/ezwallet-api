@@ -19,7 +19,7 @@ export class DbAuthenticationAdapter implements Authentication {
     const user = await this.findUserByEmailRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error('Email/Password values incorrect');
+      throw new Error('E-mail/Senha incorretos.');
     }
 
     const matchedPassword = await this.encrypter.decrypt(
@@ -28,7 +28,7 @@ export class DbAuthenticationAdapter implements Authentication {
     );
 
     if (!matchedPassword) {
-      throw new Error('Email/Password values incorrect');
+      throw new Error('E-mail/Senha incorretos.');
     }
 
     delete user.password;

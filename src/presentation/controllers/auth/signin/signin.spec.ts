@@ -107,7 +107,7 @@ describe('SignIn Controller', () => {
       .spyOn(authenticationStub, 'checkCredentials')
       .mockReturnValueOnce(
         new Promise((resolve, reject) =>
-          reject(new Error('Email/Password values incorrect')),
+          reject(new Error('E-mail/Senha incorretos.')),
         ),
       );
     const httpRequest = {
@@ -120,7 +120,7 @@ describe('SignIn Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(404);
     expect(httpResponse.body).toEqual(
-      new NotFoundDataError('Email/Password values incorrect'),
+      new NotFoundDataError('E-mail/Senha incorretos.'),
     );
   });
 
