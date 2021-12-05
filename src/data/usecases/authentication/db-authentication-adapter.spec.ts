@@ -138,9 +138,7 @@ describe('DbAuthentication Adapter', () => {
       },
     };
     const httpResponse = sut.checkCredentials(httpRequest.body);
-    await expect(httpResponse).rejects.toThrow(
-      'Email/Password values incorrect',
-    );
+    await expect(httpResponse).rejects.toThrow('E-mail/Senha incorretos.');
   });
 
   test('should an user and token on success', async () => {
