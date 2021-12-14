@@ -1,3 +1,4 @@
+import { EmailValidator } from './../../../protocols/email-validator';
 import { UserModel } from '../../../../domain/models/user';
 import {
   UpdateUser,
@@ -8,6 +9,7 @@ import UpdateUserController from './update-user';
 interface SutTypes {
   sut: UpdateUserController;
   updateUserStub: UpdateUser;
+  emailValidatorStub: EmailValidator;
 }
 
 const makeUpdateUser = (): UpdateUser => {
@@ -28,11 +30,21 @@ const makeUpdateUser = (): UpdateUser => {
   return new UpdateUserStub();
 };
 
-const makeSut = (): SutTypes => {
-  const updateUserStub = makeUpdateUser();
-  const sut = new UpdateUserController(updateUserStub);
+const makeEmailValidator = () => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid(email: string): boolean {
+      return true;
+    }
+  }
+  return new EmailValidatorStub();
+};
 
-  return { sut, updateUserStub };
+const makeSut = (): SutTypes => {
+  const emailValidatorStub = makeEmailValidator();
+  const updateUserStub = makeUpdateUser();
+  const sut = new UpdateUserController(updateUserStub, emailValidatorStub);
+
+  return { sut, updateUserStub, emailValidatorStub };
 };
 
 describe('Update User Controller', () => {
@@ -80,6 +92,32 @@ describe('Update User Controller', () => {
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error(''))),
       );
+    const httpRequest = {
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+      body: {
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it('should return 500 if emailValidator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
     const httpRequest = {
       user: {
         id: 'any_id',
