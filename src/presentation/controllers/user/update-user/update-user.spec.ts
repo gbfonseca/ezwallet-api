@@ -1,13 +1,38 @@
+import { UserModel } from '../../../../domain/models/user';
+import {
+  UpdateUser,
+  UpdateUserModel,
+} from './../../../../domain/usecases/update-user';
 import UpdateUserController from './update-user';
 
 interface SutTypes {
   sut: UpdateUserController;
+  updateUserStub: UpdateUser;
 }
 
-const makeSut = (): SutTypes => {
-  const sut = new UpdateUserController();
+const makeUpdateUser = (): UpdateUser => {
+  class UpdateUserStub implements UpdateUser {
+    update(data: UpdateUserModel): Promise<UserModel> {
+      const fakeUser = {
+        id: 'any_id',
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      };
 
-  return { sut };
+      return new Promise((resolve) => resolve(fakeUser));
+    }
+  }
+
+  return new UpdateUserStub();
+};
+
+const makeSut = (): SutTypes => {
+  const updateUserStub = makeUpdateUser();
+  const sut = new UpdateUserController(updateUserStub);
+
+  return { sut, updateUserStub };
 };
 
 describe('Update User Controller', () => {
@@ -47,5 +72,31 @@ describe('Update User Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse.statusCode).toBe(400);
+  });
+  it('should return 500 if updateUser throws', async () => {
+    const { sut, updateUserStub } = makeSut();
+    jest
+      .spyOn(updateUserStub, 'update')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error(''))),
+      );
+    const httpRequest = {
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+      body: {
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
   });
 });
