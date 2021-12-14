@@ -33,4 +33,19 @@ describe('Update User Controller', () => {
 
     expect(sutSpy).toHaveBeenCalledWith(httpRequest);
   });
+  it('should return 400 if invalid user provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      user: null,
+      body: {
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
