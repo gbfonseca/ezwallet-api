@@ -4,7 +4,7 @@ import {
   UpdateUser,
   UpdateUserModel,
 } from './../../../../domain/usecases/update-user';
-import { badRequest, serverError } from './../../../helpers/http-helper';
+import { badRequest, serverError, ok } from './../../../helpers/http-helper';
 import { UserModel } from './../../../../domain/models/user';
 import { HttpRequest, HttpResponse } from '../../../protocols/http';
 import { Controller } from './../../../protocols/controller';
@@ -31,9 +31,9 @@ export default class UpdateUserController implements Controller {
         return badRequest(new InvalidParamError('E-mail'));
       }
 
-      await this.updateUser.update(body);
+      const updatedUser = await this.updateUser.update(body);
 
-      return new Promise((resolve) => resolve(null));
+      return ok<UserModel>(updatedUser);
     } catch (error) {
       return serverError();
     }

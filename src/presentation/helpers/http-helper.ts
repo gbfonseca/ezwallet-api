@@ -22,7 +22,7 @@ export const serverError = (): HttpResponse => {
   };
 };
 
-export const ok = (data: any): HttpResponse => {
+export const ok = <T = any>(data: T): HttpResponse => {
   return {
     statusCode: 200,
     body: data,
