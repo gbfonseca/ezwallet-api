@@ -160,4 +160,28 @@ describe('Update User Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400);
   });
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+      body: {
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.body.name).toBe('new_name');
+  });
 });
