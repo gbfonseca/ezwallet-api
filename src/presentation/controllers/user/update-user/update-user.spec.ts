@@ -137,4 +137,27 @@ describe('Update User Controller', () => {
 
     expect(httpResponse.statusCode).toBe(500);
   });
+  it('should return 400 if invalid email provided', async () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false);
+
+    const httpRequest = {
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+      body: {
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
