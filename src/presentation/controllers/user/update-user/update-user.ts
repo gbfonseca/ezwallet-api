@@ -1,3 +1,4 @@
+import { EmailValidator } from './../../../protocols/email-validator';
 import {
   UpdateUser,
   UpdateUserModel,
@@ -8,7 +9,10 @@ import { HttpRequest, HttpResponse } from '../../../protocols/http';
 import { Controller } from './../../../protocols/controller';
 
 export default class UpdateUserController implements Controller {
-  constructor(private readonly updateUser: UpdateUser) {}
+  constructor(
+    private readonly updateUser: UpdateUser,
+    private readonly emailValidator: EmailValidator,
+  ) {}
 
   async handle(
     httpRequest: HttpRequest<UpdateUserModel>,
@@ -19,6 +23,8 @@ export default class UpdateUserController implements Controller {
       if (!user) {
         return badRequest(new Error('Usuário inválido.'));
       }
+
+      this.emailValidator.isValid(body.email);
 
       await this.updateUser.update(body);
 
