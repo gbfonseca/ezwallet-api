@@ -1,13 +1,16 @@
-import { InvalidParamError } from './../../../errors/invalid-param-error';
-import { EmailValidator } from './../../../protocols/email-validator';
 import {
+  InvalidParamError,
+  EmailValidator,
   UpdateUser,
   UpdateUserModel,
-} from './../../../../domain/usecases/update-user';
-import { badRequest, serverError, ok } from './../../../helpers/http-helper';
-import { UserModel } from './../../../../domain/models/user';
-import { HttpRequest, HttpResponse } from '../../../protocols/http';
-import { Controller } from './../../../protocols/controller';
+  badRequest,
+  serverError,
+  ok,
+  UserModel,
+  HttpRequest,
+  HttpResponse,
+  Controller,
+} from './update-user-protocols';
 
 export default class UpdateUserController implements Controller {
   constructor(

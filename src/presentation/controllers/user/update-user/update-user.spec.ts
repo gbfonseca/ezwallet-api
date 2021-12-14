@@ -1,10 +1,10 @@
-import { EmailValidator } from './../../../protocols/email-validator';
-import { UserModel } from '../../../../domain/models/user';
+import UpdateUserController from './update-user';
 import {
+  EmailValidator,
+  UserModel,
   UpdateUser,
   UpdateUserModel,
-} from './../../../../domain/usecases/update-user';
-import UpdateUserController from './update-user';
+} from './update-user-protocols';
 
 interface SutTypes {
   sut: UpdateUserController;
