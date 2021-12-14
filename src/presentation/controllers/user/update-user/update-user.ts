@@ -1,3 +1,4 @@
+import { InvalidParamError } from './../../../errors/invalid-param-error';
 import { EmailValidator } from './../../../protocols/email-validator';
 import {
   UpdateUser,
@@ -24,7 +25,11 @@ export default class UpdateUserController implements Controller {
         return badRequest(new Error('Usuário inválido.'));
       }
 
-      this.emailValidator.isValid(body.email);
+      const emailIsValid = this.emailValidator.isValid(body.email);
+
+      if (!emailIsValid) {
+        return badRequest(new InvalidParamError('E-mail'));
+      }
 
       await this.updateUser.update(body);
 
