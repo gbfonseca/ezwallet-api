@@ -1,11 +1,20 @@
+import { UpdateUserRepository } from './../../../../../data/protocols/update-user-repository';
 import { FindUserByEmailRepository } from './../../../../../data/protocols/find-user-by-email-repository';
 import { UserModel } from '../../../../../domain/models/user';
 import { AddUserModel } from '../../../../../domain/usecases/add-user';
 import { AddUserRepository } from '../../../../../data/protocols/add-user-repository';
 import { User } from '../../entities/user.entity';
-import { getRepository, Repository } from 'typeorm';
+import {
+  AbstractRepository,
+  EntityRepository,
+  getRepository,
+  Repository,
+} from 'typeorm';
+import { UpdateUserModel } from '../../../../../domain/usecases/update-user';
+@EntityRepository(User)
 export class UserTypeormRepository
-  implements AddUserRepository, FindUserByEmailRepository
+  extends AbstractRepository<User>
+  implements AddUserRepository, FindUserByEmailRepository, UpdateUserRepository
 {
   async add(addUser: AddUserModel): Promise<UserModel> {
     const newUser = new User();
@@ -27,6 +36,18 @@ export class UserTypeormRepository
     });
 
     return user;
+  }
+
+  async updateUser(
+    id: string,
+    updateUser: UpdateUserModel,
+  ): Promise<UserModel> {
+    const user = await this.repository.update(id, updateUser);
+    console.log(user);
+    return {
+      id,
+      ...updateUser,
+    };
   }
 
   private getCols<T>(repository: Repository<T>): (keyof T)[] {
