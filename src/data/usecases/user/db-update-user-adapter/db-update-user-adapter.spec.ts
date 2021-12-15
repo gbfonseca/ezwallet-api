@@ -51,7 +51,7 @@ describe('DbUpdateUserAdapter', () => {
     expect(sutSpy).toHaveBeenCalledWith(request.id, request.data);
   });
 
-  it('should throws if UpdateUserRepository throws ', async () => {
+  it('should throws if UpdateUserRepository throws if UpdateUserRepository throws', async () => {
     const { sut, updateUserRepositoryStub } = makeSut();
     jest
       .spyOn(updateUserRepositoryStub, 'update')
@@ -71,5 +71,29 @@ describe('DbUpdateUserAdapter', () => {
     const promise = sut.update(request.id, request.data);
 
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should return an user on success', async () => {
+    const { sut } = makeSut();
+
+    const request = {
+      id: 'any_id',
+      data: {
+        name: 'new_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const response = await sut.update(request.id, request.data);
+
+    expect(response).toEqual({
+      id: 'any_id',
+      name: 'new_name',
+      lastName: 'any_lastName',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+    });
   });
 });
