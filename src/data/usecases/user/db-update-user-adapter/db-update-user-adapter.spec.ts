@@ -9,7 +9,10 @@ interface SutTypes {
 
 const makeUpdateUserRepository = (): UpdateUserRepository => {
   class UpdateUserRepositoryStub implements UpdateUserRepository {
-    async update(id: string, updateUser: UpdateUserModel): Promise<UserModel> {
+    async updateUser(
+      id: string,
+      updateUser: UpdateUserModel,
+    ): Promise<UserModel> {
       const fakeUpdatedUser = {
         id: 'any_id',
         name: 'new_name',
@@ -54,7 +57,7 @@ describe('DbUpdateUserAdapter', () => {
   it('should throws if UpdateUserRepository throws if UpdateUserRepository throws', async () => {
     const { sut, updateUserRepositoryStub } = makeSut();
     jest
-      .spyOn(updateUserRepositoryStub, 'update')
+      .spyOn(updateUserRepositoryStub, 'updateUser')
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error())),
       );
