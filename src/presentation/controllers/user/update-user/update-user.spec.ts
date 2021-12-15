@@ -14,7 +14,7 @@ interface SutTypes {
 
 const makeUpdateUser = (): UpdateUser => {
   class UpdateUserStub implements UpdateUser {
-    update(data: UpdateUserModel): Promise<UserModel> {
+    update(id: string, data: UpdateUserModel): Promise<UserModel> {
       const fakeUser = {
         id: 'any_id',
         name: 'new_name',

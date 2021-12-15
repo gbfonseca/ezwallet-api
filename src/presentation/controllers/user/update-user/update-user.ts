@@ -34,7 +34,7 @@ export default class UpdateUserController implements Controller {
         return badRequest(new InvalidParamError('E-mail'));
       }
 
-      const updatedUser = await this.updateUser.update(body);
+      const updatedUser = await this.updateUser.update(user.id, body);
 
       return ok<UserModel>(updatedUser);
     } catch (error) {
