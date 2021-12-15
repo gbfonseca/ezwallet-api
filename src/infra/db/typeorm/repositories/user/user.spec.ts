@@ -1,10 +1,11 @@
 import { TypeormHelper } from '../../helpers/typeorm-helper';
 import { UserTypeormRepository } from './user';
 import * as dotenv from 'dotenv';
+import { getCustomRepository } from 'typeorm';
 dotenv.config();
 describe('userTypeormRepository', () => {
   const makeSut = (): UserTypeormRepository => {
-    return new UserTypeormRepository();
+    return getCustomRepository(UserTypeormRepository);
   };
 
   beforeAll(async () => {
@@ -60,5 +61,18 @@ describe('userTypeormRepository', () => {
 
     expect(user).toBeTruthy();
     expect(user.email).toBe('any_email@mail.com');
+  });
+
+  test('should return an UpdateUser on success', async () => {
+    const sut = makeSut();
+
+    const user = await sut.updateUser('any_id', {
+      name: 'new_name',
+      lastName: 'any_lastName',
+      email: 'any_email@mail.com',
+    });
+
+    expect(user).toBeTruthy();
+    expect(user.name).toBe('new_name');
   });
 });
