@@ -1,5 +1,5 @@
 import { FindUserByEmailRepository } from '../../protocols/find-user-by-email-repository';
-import { UserModel } from '../user/db-add-user-adapter-protocols';
+import { UserModel } from '../user/db-add-user-adapter/db-add-user-adapter-protocols';
 import { DbAuthenticationAdapter } from './db-authentication-adapter';
 import { TokenGenerator } from '../../protocols/token-generator';
 import { Encrypter } from '../../protocols/encrypter';
