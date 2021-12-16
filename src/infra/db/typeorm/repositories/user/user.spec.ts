@@ -1,11 +1,10 @@
 import { TypeormHelper } from '../../helpers/typeorm-helper';
 import { UserTypeormRepository } from './user';
 import * as dotenv from 'dotenv';
-import { getCustomRepository } from 'typeorm';
 dotenv.config();
 describe('userTypeormRepository', () => {
   const makeSut = (): UserTypeormRepository => {
-    return getCustomRepository(UserTypeormRepository);
+    return new UserTypeormRepository();
   };
 
   beforeAll(async () => {
