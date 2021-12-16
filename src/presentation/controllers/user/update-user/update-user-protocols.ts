@@ -1,3 +1,4 @@
+export { UpdateUserController } from './update-user';
 export { InvalidParamError } from './../../../errors/invalid-param-error';
 export { EmailValidator } from './../../../protocols/email-validator';
 export {

@@ -12,7 +12,7 @@ import {
   Controller,
 } from './update-user-protocols';
 
-export default class UpdateUserController implements Controller {
+export class UpdateUserController implements Controller {
   constructor(
     private readonly updateUser: UpdateUser,
     private readonly emailValidator: EmailValidator,
@@ -23,15 +23,16 @@ export default class UpdateUserController implements Controller {
   ): Promise<HttpResponse<UserModel>> {
     try {
       const { user, body } = httpRequest;
-
       if (!user) {
         return badRequest(new Error('Usuário inválido.'));
       }
 
-      const emailIsValid = this.emailValidator.isValid(body.email);
+      if (body.email) {
+        const emailIsValid = this.emailValidator.isValid(body.email);
 
-      if (!emailIsValid) {
-        return badRequest(new InvalidParamError('E-mail'));
+        if (!emailIsValid) {
+          return badRequest(new InvalidParamError('E-mail'));
+        }
       }
 
       const updatedUser = await this.updateUser.update(user.id, body);
