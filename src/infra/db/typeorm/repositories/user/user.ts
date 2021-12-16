@@ -4,16 +4,9 @@ import { UserModel } from '../../../../../domain/models/user';
 import { AddUserModel } from '../../../../../domain/usecases/add-user';
 import { AddUserRepository } from '../../../../../data/protocols/add-user-repository';
 import { User } from '../../entities/user.entity';
-import {
-  AbstractRepository,
-  EntityRepository,
-  getRepository,
-  Repository,
-} from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { UpdateUserModel } from '../../../../../domain/usecases/update-user';
-@EntityRepository(User)
 export class UserTypeormRepository
-  extends AbstractRepository<User>
   implements AddUserRepository, FindUserByEmailRepository, UpdateUserRepository
 {
   async add(addUser: AddUserModel): Promise<UserModel> {
@@ -42,8 +35,7 @@ export class UserTypeormRepository
     id: string,
     updateUser: UpdateUserModel,
   ): Promise<UserModel> {
-    const user = await this.repository.update(id, updateUser);
-    console.log(user);
+    await User.update(id, updateUser);
     return {
       id,
       ...updateUser,
