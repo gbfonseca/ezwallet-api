@@ -1,5 +1,5 @@
-import UpdateUserController from './update-user';
 import {
+  UpdateUserController,
   EmailValidator,
   UserModel,
   UpdateUser,
