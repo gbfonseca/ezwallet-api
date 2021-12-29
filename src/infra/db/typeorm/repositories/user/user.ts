@@ -32,12 +32,12 @@ export class UserTypeormRepository
   }
 
   async updateUser(
-    id: string,
+    user: UserModel,
     updateUser: UpdateUserModel,
   ): Promise<UserModel> {
-    await User.update(id, updateUser);
+    await User.update(user.id, updateUser);
     return {
-      id,
+      ...user,
       ...updateUser,
     };
   }

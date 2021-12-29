@@ -35,7 +35,7 @@ export class UpdateUserController implements Controller {
         }
       }
 
-      const updatedUser = await this.updateUser.update(user.id, body);
+      const updatedUser = await this.updateUser.update(user, body);
 
       return ok<UserModel>(updatedUser);
     } catch (error) {
