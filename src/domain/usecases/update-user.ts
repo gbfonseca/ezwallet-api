@@ -7,5 +7,5 @@ export interface UpdateUserModel {
 }
 
 export interface UpdateUser {
-  update(id: string, data: UpdateUserModel): Promise<UserModel>;
+  update(user: UserModel, data: UpdateUserModel): Promise<UserModel>;
 }

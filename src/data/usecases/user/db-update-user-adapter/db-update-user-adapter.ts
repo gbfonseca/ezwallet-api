@@ -8,8 +8,8 @@ import {
 export class DbUpdateUserAdapter implements UpdateUser {
   constructor(private readonly updateUserRepository: UpdateUserRepository) {}
 
-  async update(id: string, data: UpdateUserModel): Promise<UserModel> {
-    const updatedUser = await this.updateUserRepository.updateUser(id, data);
+  async update(user: UserModel, data: UpdateUserModel): Promise<UserModel> {
+    const updatedUser = await this.updateUserRepository.updateUser(user, data);
     return updatedUser;
   }
 }
