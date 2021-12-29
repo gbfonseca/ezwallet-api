@@ -10,7 +10,7 @@ interface SutTypes {
 const makeUpdateUserRepository = (): UpdateUserRepository => {
   class UpdateUserRepositoryStub implements UpdateUserRepository {
     async updateUser(
-      id: string,
+      user: UserModel,
       updateUser: UpdateUserModel,
     ): Promise<UserModel> {
       const fakeUpdatedUser = {
@@ -40,7 +40,12 @@ describe('DbUpdateUserAdapter', () => {
     const { sut } = makeSut();
     const sutSpy = jest.spyOn(sut, 'update');
     const request = {
-      id: 'any_id',
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
       data: {
         name: 'new_name',
         lastName: 'any_lastName',
@@ -49,9 +54,9 @@ describe('DbUpdateUserAdapter', () => {
       },
     };
 
-    await sut.update(request.id, request.data);
+    await sut.update(request.user, request.data);
 
-    expect(sutSpy).toHaveBeenCalledWith(request.id, request.data);
+    expect(sutSpy).toHaveBeenCalledWith(request.user, request.data);
   });
 
   it('should throws if UpdateUserRepository throws if UpdateUserRepository throws', async () => {
@@ -62,7 +67,12 @@ describe('DbUpdateUserAdapter', () => {
         new Promise((resolve, reject) => reject(new Error())),
       );
     const request = {
-      id: 'any_id',
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
       data: {
         name: 'new_name',
         lastName: 'any_lastName',
@@ -71,7 +81,7 @@ describe('DbUpdateUserAdapter', () => {
       },
     };
 
-    const promise = sut.update(request.id, request.data);
+    const promise = sut.update(request.user, request.data);
 
     await expect(promise).rejects.toThrow();
   });
@@ -80,7 +90,12 @@ describe('DbUpdateUserAdapter', () => {
     const { sut } = makeSut();
 
     const request = {
-      id: 'any_id',
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+      },
       data: {
         name: 'new_name',
         lastName: 'any_lastName',
@@ -89,7 +104,7 @@ describe('DbUpdateUserAdapter', () => {
       },
     };
 
-    const response = await sut.update(request.id, request.data);
+    const response = await sut.update(request.user, request.data);
 
     expect(response).toEqual({
       id: 'any_id',
