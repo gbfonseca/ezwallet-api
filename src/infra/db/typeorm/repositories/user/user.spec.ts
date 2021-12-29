@@ -65,13 +65,20 @@ describe('userTypeormRepository', () => {
   test('should return an UpdateUser on success', async () => {
     const sut = makeSut();
 
-    const user = await sut.updateUser('any_id', {
+    const user = {
+      id: 'any_id',
+      name: 'any_name',
+      lastName: 'any_lastName',
+      email: 'any_email@mail.com',
+    };
+
+    const userUpdated = await sut.updateUser(user, {
       name: 'new_name',
       lastName: 'any_lastName',
       email: 'any_email@mail.com',
     });
 
-    expect(user).toBeTruthy();
-    expect(user.name).toBe('new_name');
+    expect(userUpdated).toBeTruthy();
+    expect(userUpdated.name).toBe('new_name');
   });
 });
