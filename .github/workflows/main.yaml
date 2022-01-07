@@ -15,7 +15,25 @@ on:
 
 jobs:
   # Check out the following article for more inspiration on setting up a
-  # test:
+  test:
+    runs-on: ubuntu-latest
+    name: 'Run Tests'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - run: |
+          touch .env
+          echo SECRET_KEY=secret >> .env
+          echo DB_ENTITIES="src/infra/db/typeorm/entities/**.entity{.ts, .js}" >> .env
+          echo DB_MIGRATIONS="src/infra/db/typeorm/migrations/**{.ts, .js}" >> .env
+          echo DB_ENTITIES_DIR="src/infra/db/typeorm/entities/" >> .env
+          echo DB_MIGRATIONS_DIR="src/infra/db/typeorm/migrations/" >> .env
+          cat .env
+      - run: yarn install
+      - run: yarn test
 
   # Include your test suite here.
   # lint:
@@ -24,7 +42,7 @@ jobs:
   deploy:
     # If the test & lint jobs don't pass,
     # the deploy job willn't even execute
-    # needs: [test, lint]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -39,3 +57,4 @@ jobs:
           heroku_email: "gabriel.fonsecadev@gmail.com"
           healthcheck: "https://ezwallet-hml.herokuapp.com/api/healthcheck"
           rollbackonhealthcheckfailed: true
+
