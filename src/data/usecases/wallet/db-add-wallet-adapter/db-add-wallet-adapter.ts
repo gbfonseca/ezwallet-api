@@ -1,10 +1,10 @@
-import { UserModel } from '../../../domain/models/user';
-import { WalletModel } from '../../../domain/models/wallet';
 import {
+  UserModel,
+  WalletModel,
   AddWallet,
   AddWalletModel,
-} from '../../../domain/usecases/wallet/add-wallet';
-import { AddWalletRepository } from '../../protocols/add-wallet-repository';
+  AddWalletRepository,
+} from './db-add-wallet-protocols';
 
 export class DbAddWalletAdapter implements AddWallet {
   constructor(private readonly addWalletRepository: AddWalletRepository) {}
