@@ -10,7 +10,7 @@ export class DbAddWalletAdapter implements AddWallet {
   constructor(private readonly addWalletRepository: AddWalletRepository) {}
 
   async add(addWallet: AddWalletModel, user: UserModel): Promise<WalletModel> {
-    await this.addWalletRepository.add(addWallet, user);
-    return new Promise((resolve) => resolve(null));
+    const wallet = await this.addWalletRepository.add(addWallet, user);
+    return wallet;
   }
 }
