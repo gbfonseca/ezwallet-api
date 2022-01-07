@@ -1,8 +1,14 @@
-import { WalletModel } from '../../../../domain/models/wallet';
-import { AddWallet } from '../../../../domain/usecases/wallet/add-wallet';
-import { MissingParamError } from '../../../errors';
-import { badRequest, ok, serverError } from '../../../helpers';
-import { Controller, HttpRequest, HttpResponse } from '../../../protocols';
+import {
+  WalletModel,
+  AddWallet,
+  MissingParamError,
+  badRequest,
+  ok,
+  serverError,
+  Controller,
+  HttpRequest,
+  HttpResponse,
+} from './create-wallet-protocols';
 
 type HttpRequestBodyType = {
   name: string;
