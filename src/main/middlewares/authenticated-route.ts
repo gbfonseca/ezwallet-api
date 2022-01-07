@@ -1,7 +1,8 @@
-import { User } from './../../infra/db/typeorm/entities/user.entity';
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { getCustomRepository } from 'typeorm';
+import { UserTypeormRepository } from '../../infra/db/typeorm/repositories/user/user';
 dotenv.config();
 
 type PayloadType = {
@@ -20,7 +21,8 @@ export default (req: any, res: Response, next: NextFunction): void => {
           .status(400)
           .json({ auth: false, message: 'Invalid token provided' });
       }
-      const user = await User.findOne(payload.id);
+      const userRepository = getCustomRepository(UserTypeormRepository);
+      const user = await userRepository.findOne(payload.id);
       req.user = user;
       next();
     },
