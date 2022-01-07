@@ -1,8 +1,10 @@
-import { UserModel } from '../../../domain/models/user';
-import { WalletModel } from '../../../domain/models/wallet';
-import { AddWalletModel } from '../../../domain/usecases/wallet/add-wallet';
-import { AddWalletRepository } from '../../protocols/add-wallet-repository';
 import { DbAddWalletAdapter } from './db-add-wallet-adapter';
+import {
+  UserModel,
+  WalletModel,
+  AddWalletModel,
+  AddWalletRepository,
+} from './db-add-wallet-protocols';
 
 interface SutTypes {
   sut: DbAddWalletAdapter;
