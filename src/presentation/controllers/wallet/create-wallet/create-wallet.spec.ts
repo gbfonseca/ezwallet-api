@@ -140,4 +140,25 @@ describe('CreateWalletController', () => {
       },
     );
   });
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'Any Wallet Name',
+      },
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(200);
+  });
 });
