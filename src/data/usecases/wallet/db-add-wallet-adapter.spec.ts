@@ -23,7 +23,6 @@ const makeAddWalletRepository = (): AddWalletRepository => {
           name: 'any_name',
           lastName: 'any_lastName',
           email: 'any_email@mail.com',
-          password: 'any_password',
         },
       };
       return new Promise((resolve) => resolve(fakeWallet));
@@ -82,5 +81,28 @@ describe('DbAddWalletAdapter', () => {
     const promise = sut.add(addWallet, user);
 
     await expect(promise).rejects.toThrow();
+  });
+
+  it('should return an wallet on success', async () => {
+    const { sut } = makeSut();
+
+    const addWallet = {
+      name: 'Any Wallet Name',
+    };
+
+    const user = {
+      id: 'any_id',
+      name: 'any_name',
+      lastName: 'any_lastName',
+      email: 'any_email@mail.com',
+    };
+
+    const reponse = await sut.add(addWallet, user);
+
+    expect(reponse).toEqual({
+      id: 'any_id',
+      name: addWallet.name,
+      user,
+    });
   });
 });
