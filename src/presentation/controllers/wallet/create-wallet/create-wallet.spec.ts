@@ -109,4 +109,35 @@ describe('CreateWalletController', () => {
 
     expect(httpResponse.statusCode).toBe(500);
   });
+
+  it('should calls AddWallet with correct values ', async () => {
+    const { sut, addWalletStub } = makeSut();
+    const addWalletStubSpy = jest.spyOn(addWalletStub, 'add');
+
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'Any Wallet Name',
+      },
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    await sut.handle(httpRequest);
+
+    expect(addWalletStubSpy).toHaveBeenCalledWith(
+      { name: 'Any Wallet Name' },
+      {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    );
+  });
 });
