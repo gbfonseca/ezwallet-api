@@ -4,7 +4,10 @@ name: Deploy on Heroku # Name of the workflow
 
 # Events that trigger a workflow:
 # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   # Check out the following article for more inspiration on setting up a
