@@ -1,3 +1,4 @@
+import { HttpRequest } from '../../../protocols';
 import { CreateWalletController } from './create-wallet';
 
 interface SutTypes {
@@ -15,7 +16,18 @@ describe('CreateWalletController', () => {
     const { sut } = makeSut();
     const sutSpy = jest.spyOn(sut, 'handle');
 
-    const httpRequest = {};
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'Any Wallet Name',
+      },
+      user: {
+        id: 'any_id',
+        name: 'any_name',
+        lastName: 'any_lastName',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
 
     await sut.handle(httpRequest);
 
