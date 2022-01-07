@@ -28,7 +28,7 @@ export class User extends BaseEntity implements UserModel {
   @Column({ type: 'varchar', length: 512, nullable: false, select: false })
   password: string;
 
-  @OneToMany(() => Wallet, (wallet) => wallet.id)
+  @OneToMany(() => Wallet, (wallet) => wallet.user)
   wallets: WalletModel[];
 
   @CreateDateColumn()
