@@ -1,7 +1,7 @@
 import { WalletModel } from '../../../../domain/models/wallet';
 import { AddWallet } from '../../../../domain/usecases/wallet/add-wallet';
 import { MissingParamError } from '../../../errors';
-import { badRequest, serverError } from '../../../helpers';
+import { badRequest, ok, serverError } from '../../../helpers';
 import { Controller, HttpRequest, HttpResponse } from '../../../protocols';
 
 type HttpRequestBodyType = {
@@ -23,9 +23,12 @@ export class CreateWalletController implements Controller {
         }
       }
 
-      await this.addWallet.add(httpRequest.body, httpRequest.user);
+      const wallet = await this.addWallet.add(
+        httpRequest.body,
+        httpRequest.user,
+      );
 
-      return new Promise((resolve) => resolve(null));
+      return ok(wallet);
     } catch (error) {
       return serverError();
     }
