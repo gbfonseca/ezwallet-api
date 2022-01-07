@@ -1,7 +1,8 @@
 import { TypeormHelper } from './../../infra/db/typeorm/helpers/typeorm-helper';
 import request from 'supertest';
 import app from '../config/app';
-
+import setupMiddlewares from '../config/middlewares';
+import setupRoutes from '../config/routes';
 const fakeUser = {
   name: 'Gabriel',
   lastName: 'Fonseca',
@@ -23,6 +24,8 @@ describe('LoggedUser route', () => {
         entitiesDir: './src/infra/db/typeorm/entities',
       },
     });
+    setupMiddlewares(app);
+    setupRoutes(app);
   });
 
   afterAll(async () => {

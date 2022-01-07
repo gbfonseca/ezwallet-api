@@ -1,6 +1,10 @@
 import request from 'supertest';
 import app from '../config/app';
+import setupMiddlewares from '../config/middlewares';
 describe('Authenticated Route', () => {
+  beforeAll(() => {
+    setupMiddlewares(app);
+  });
   test('should return 400 if invalid token provided', async () => {
     app.get('/authenticated_test', (req, res) => {
       if (!req.headers.authorization) {
