@@ -1,6 +1,5 @@
 import { UserModel } from '../../../../domain/models/user';
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -12,7 +11,7 @@ import { WalletModel } from '../../../../domain/models/wallet';
 import { Wallet } from './wallet.entity';
 
 @Entity('user')
-export class User extends BaseEntity implements UserModel {
+export class User implements UserModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -4,10 +4,11 @@ import { DbAuthenticationAdapter } from './../../data/usecases/authentication/db
 import { EmailValidatorAdapter } from './../../utils/EmailValidatorAdapter/email-validator-adapter';
 import { SignInController } from '../../presentation/controllers/auth/signin/signin';
 import { JwtAdapter } from '../../infra/jwt/jwt-adapter';
+import { getCustomRepository } from 'typeorm';
 export const makeSignInController = (): SignInController => {
   const SALT = 12;
   const emailValidator = new EmailValidatorAdapter();
-  const userTypeormRepository = new UserTypeormRepository();
+  const userTypeormRepository = getCustomRepository(UserTypeormRepository);
   const bcryptAdapter = new BcryptAdapter(SALT);
   const jwtAdapter = new JwtAdapter();
   const dbAuthentication = new DbAuthenticationAdapter(
