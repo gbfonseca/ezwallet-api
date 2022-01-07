@@ -4,9 +4,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { WalletModel } from '../../../../domain/models/wallet';
+import { Wallet } from './wallet.entity';
 
 @Entity('user')
 export class User extends BaseEntity implements UserModel {
@@ -24,6 +27,9 @@ export class User extends BaseEntity implements UserModel {
 
   @Column({ type: 'varchar', length: 512, nullable: false, select: false })
   password: string;
+
+  @OneToMany(() => Wallet, (wallet) => wallet.id)
+  wallets: WalletModel[];
 
   @CreateDateColumn()
   created_at: Date;
