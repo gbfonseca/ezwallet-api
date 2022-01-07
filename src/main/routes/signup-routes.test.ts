@@ -1,7 +1,8 @@
 import request from 'supertest';
 import { TypeormHelper } from '../../infra/db/typeorm/helpers/typeorm-helper';
 import app from '../config/app';
-
+import setupMiddlewares from '../config/middlewares';
+import setupRoutes from '../config/routes';
 describe('SignUp Route', () => {
   beforeAll(async () => {
     await TypeormHelper.connect({
@@ -15,6 +16,8 @@ describe('SignUp Route', () => {
         entitiesDir: './src/infra/db/typeorm/entities',
       },
     });
+    setupMiddlewares(app);
+    setupRoutes(app);
   });
 
   afterAll(() => {
