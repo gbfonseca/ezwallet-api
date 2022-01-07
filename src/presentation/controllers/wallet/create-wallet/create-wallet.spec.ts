@@ -1,11 +1,11 @@
-import { WalletModel } from '../../../../domain/models/wallet';
 import {
+  WalletModel,
   AddWallet,
   AddWalletModel,
-} from '../../../../domain/usecases/wallet/add-wallet';
-import { HttpRequest } from '../../../protocols';
-import { UserModel } from '../../auth/signup/signup-protocols';
-import { CreateWalletController } from './create-wallet';
+  HttpRequest,
+  UserModel,
+  CreateWalletController,
+} from './create-wallet-protocols';
 
 interface SutTypes {
   sut: CreateWalletController;
