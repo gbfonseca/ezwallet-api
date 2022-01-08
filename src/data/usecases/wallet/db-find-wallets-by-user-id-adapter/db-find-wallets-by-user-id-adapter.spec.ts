@@ -63,4 +63,14 @@ describe('DbFindWalletsByUserId Adapter', () => {
 
     await expect(promise).rejects.toThrow();
   });
+
+  it('should return an wallets array on success', async () => {
+    const { sut } = makeSut();
+
+    const id = 'any_id';
+
+    const response = await sut.find(id);
+
+    expect(response.length).toBeGreaterThan(0);
+  });
 });
