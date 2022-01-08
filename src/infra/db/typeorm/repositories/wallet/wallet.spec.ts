@@ -54,4 +54,27 @@ describe('WalletTypeormRepository', () => {
     expect(response).toBeTruthy();
     expect(response.id).toBeTruthy();
   });
+
+  it('should return an wallets array on success', async () => {
+    const sut = makeSut();
+
+    const addWallet = {
+      name: 'Any Wallet Name',
+    };
+
+    const user = {
+      id: 'any_id',
+      name: 'any_name',
+      lastName: 'any_lastName',
+      email: 'any_email@mail.com',
+    };
+
+    await sut.add(addWallet, user);
+
+    const id = 'any_id';
+
+    const response = await sut.findByUserId(id);
+
+    expect(response.length).toBeGreaterThan(0);
+  });
 });
