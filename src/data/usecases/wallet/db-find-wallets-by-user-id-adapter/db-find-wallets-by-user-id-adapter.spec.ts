@@ -10,7 +10,7 @@ const makeFindWalletsByUserIdRepository = (): FindWalletsByUserIdRepository => {
   class FindWalletsByUserIdRepositoryStub
     implements FindWalletsByUserIdRepository
   {
-    find(id: string): Promise<WalletModel[]> {
+    findByUserId(id: string): Promise<WalletModel[]> {
       const fakeWallet = {
         id: 'any_id',
         name: 'any_name',
@@ -52,7 +52,7 @@ describe('DbFindWalletsByUserId Adapter', () => {
   it('should throws if FindWalletsByUserIdRepository throws', async () => {
     const { sut, findWalletsByUserIdRepositoryStub } = makeSut();
     jest
-      .spyOn(findWalletsByUserIdRepositoryStub, 'find')
+      .spyOn(findWalletsByUserIdRepositoryStub, 'findByUserId')
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error())),
       );

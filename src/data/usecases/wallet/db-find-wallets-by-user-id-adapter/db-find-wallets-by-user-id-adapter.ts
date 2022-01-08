@@ -8,7 +8,7 @@ export class DbFindWalletsByUserIdAdapter implements FindWalletsByUserId {
   ) {}
 
   async find(id: string): Promise<WalletModel[]> {
-    const wallets = await this.findWalletsByUserIdRepository.find(id);
+    const wallets = await this.findWalletsByUserIdRepository.findByUserId(id);
     return wallets;
   }
 }
