@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import { join } from 'path';
 dotenv.config();
 export default {
   node_env: process.env.NODE_ENV,
@@ -10,12 +11,24 @@ export default {
     port: process.env.DB_PORT,
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    entities: [process.env.DB_ENTITIES],
-    migrations: [process.env.DB_MIGRATIONS],
+    entities: [join(__dirname, '..', '..', '..', process.env.DB_ENTITIES)],
+    migrations: [join(__dirname, '..', '..', '..', process.env.DB_MIGRATIONS)],
     synchronize: true,
     cli: {
-      migrationsDir: process.env.DB_ENTITIES_DIR,
-      entitiesDir: process.env.DB_MIGRATIONS_DIR,
+      migrationsDir: join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        process.env.DB_ENTITIES_DIR,
+      ),
+      entitiesDir: join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        process.env.DB_MIGRATIONS_DIR,
+      ),
     },
   },
 };
