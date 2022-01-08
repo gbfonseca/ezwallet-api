@@ -10,6 +10,6 @@
   },
 
   "include": ["src/", "tests/"],
-  // "exclude": ["**/*.spec.ts"]
+  "exclude": ["**/*.spec.ts"]
 
 }
