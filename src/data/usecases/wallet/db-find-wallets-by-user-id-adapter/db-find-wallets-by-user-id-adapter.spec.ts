@@ -1,4 +1,4 @@
-import { DbFindWalletsByUserIdAdapter } from './db-find-walelts-by-user-id-adapter';
+import { DbFindWalletsByUserIdAdapter } from './db-find-wallets-by-user-id-adapter';
 
 interface SutTypes {
   sut: DbFindWalletsByUserIdAdapter;
