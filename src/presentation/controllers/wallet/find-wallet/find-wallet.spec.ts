@@ -1,13 +1,37 @@
+import { WalletModel } from '../create-wallet/create-wallet-protocols';
 import { FindWalletController } from './find-wallet';
-
+import { FindWalletsByUserId } from '../../../../domain/usecases/wallet/find-wallets-by-user-id';
 interface SutTypes {
   sut: FindWalletController;
+  findWalletsByUserIdStub: FindWalletsByUserId;
 }
 
-const makeSut = (): SutTypes => {
-  const sut = new FindWalletController();
+const makeFindWalletsByUserId = (): FindWalletsByUserId => {
+  class FindWalletsByUserIdStub implements FindWalletsByUserId {
+    async find(id: string): Promise<WalletModel> {
+      const fakeWallet = {
+        id: 'any_id',
+        name: 'any_name',
+        user: {
+          id: 'any_id',
+          email: 'any_email@mail.com',
+          name: 'any_name',
+          lastName: 'any_lastName',
+        },
+      };
 
-  return { sut };
+      return new Promise((resolve) => resolve(fakeWallet));
+    }
+  }
+
+  return new FindWalletsByUserIdStub();
+};
+
+const makeSut = (): SutTypes => {
+  const findWalletsByUserIdStub = makeFindWalletsByUserId();
+  const sut = new FindWalletController(findWalletsByUserIdStub);
+
+  return { sut, findWalletsByUserIdStub };
 };
 
 describe('FindWallet Controller', () => {
@@ -36,5 +60,28 @@ describe('FindWallet Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it('should return 500 if FindWalletsByUserId throws', async () => {
+    const { sut, findWalletsByUserIdStub } = makeSut();
+
+    jest
+      .spyOn(findWalletsByUserIdStub, 'find')
+      .mockImplementationOnce(
+        () => new Promise((resolve, reject) => reject(new Error())),
+      );
+
+    const httpRequest = {
+      user: {
+        id: 'any_id',
+        email: 'any_email@mail.com',
+        name: 'any_name',
+        lastName: 'any_lastName',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
   });
 });
