@@ -47,9 +47,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - run: yarn install
-      - run: yarn build
       - name: Deploying to Heroku
         # More details available at:
         # https://github.com/akhileshns/heroku-deploy
