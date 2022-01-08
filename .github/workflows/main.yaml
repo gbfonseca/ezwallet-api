@@ -57,4 +57,5 @@ jobs:
           heroku_email: "gabriel.fonsecadev@gmail.com"
           healthcheck: "https://ezwallet-hml.herokuapp.com/api/healthcheck"
           rollbackonhealthcheckfailed: true
+          delay: 10
 
