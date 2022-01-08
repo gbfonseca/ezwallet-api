@@ -8,7 +8,7 @@ interface SutTypes {
 
 const makeFindWalletsByUserId = (): FindWalletsByUserId => {
   class FindWalletsByUserIdStub implements FindWalletsByUserId {
-    async find(id: string): Promise<WalletModel> {
+    async find(id: string): Promise<WalletModel[]> {
       const fakeWallet = {
         id: 'any_id',
         name: 'any_name',
@@ -20,7 +20,7 @@ const makeFindWalletsByUserId = (): FindWalletsByUserId => {
         },
       };
 
-      return new Promise((resolve) => resolve(fakeWallet));
+      return new Promise((resolve) => resolve([fakeWallet]));
     }
   }
 
@@ -83,5 +83,22 @@ describe('FindWallet Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      user: {
+        id: 'any_id',
+        email: 'any_email@mail.com',
+        name: 'any_name',
+        lastName: 'any_lastName',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(200);
   });
 });
