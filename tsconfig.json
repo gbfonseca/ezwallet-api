@@ -9,7 +9,7 @@
     "emitDecoratorMetadata": true,
   },
 
-  "include": ["src/", "tests/"],
-  "exclude": ["**/*.spec.ts"]
+  "include": ["src/"],
+  // "exclude": ["**/*.spec.ts"]
 
 }
