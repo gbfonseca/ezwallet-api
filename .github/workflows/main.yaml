@@ -55,7 +55,6 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "ezwallet-hml"
           heroku_email: "gabriel.fonsecadev@gmail.com"
-          # healthcheck: "https://ezwallet-hml.herokuapp.com/api/healthcheck"
-          # rollbackonhealthcheckfailed: true
-          delay: 10
+          healthcheck: "https://ezwallet-hml.herokuapp.com/api/healthcheck"
+          rollbackonhealthcheckfailed: true
 
