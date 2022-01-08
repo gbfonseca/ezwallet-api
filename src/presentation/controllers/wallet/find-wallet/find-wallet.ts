@@ -4,13 +4,15 @@ import {
   Controller,
   HttpRequest,
   HttpResponse,
+  ok,
   serverError,
+  WalletModel,
 } from '../create-wallet/create-wallet-protocols';
 
 export class FindWalletController implements Controller {
   constructor(private readonly findWalletsByUserId: FindWalletsByUserId) {}
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse<any>> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse<WalletModel[]>> {
     try {
       const { user } = httpRequest;
 
@@ -18,9 +20,9 @@ export class FindWalletController implements Controller {
         return badRequest(new Error());
       }
 
-      await this.findWalletsByUserId.find(user.id);
+      const wallets = await this.findWalletsByUserId.find(user.id);
 
-      return new Promise((resolve) => resolve(null));
+      return ok(wallets);
     } catch (error) {
       return serverError();
     }
