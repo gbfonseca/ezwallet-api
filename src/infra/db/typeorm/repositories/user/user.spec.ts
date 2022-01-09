@@ -14,7 +14,7 @@ describe('userTypeormRepository', () => {
       database: ':memory:',
       entities: [process.env.DB_ENTITIES],
       migrations: [process.env.DB_MIGRATIONS],
-      migrationsRun: true,
+      synchronize: true,
       cli: {
         migrationsDir: process.env.DB_ENTITIES_DIR,
         entitiesDir: process.env.DB_MIGRATIONS_DIR,

@@ -12,7 +12,7 @@ describe('FindWalletsByUserId route', () => {
       database: ':memory:',
       entities: ['src/infra/db/typeorm/entities/**.ts'],
       migrations: ['src/infra/db/typeorm/migrations/**.ts'],
-      migrationsRun: true,
+      synchronize: true,
       cli: {
         migrationsDir: './src/infra/db/typeorm/migrations',
         entitiesDir: './src/infra/db/typeorm/entities',
