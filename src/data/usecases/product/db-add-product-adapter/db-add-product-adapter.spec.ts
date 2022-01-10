@@ -114,4 +114,20 @@ describe('DbAddProduct Adapter', () => {
 
     await expect(promise).rejects.toThrow();
   });
+
+  test('should calls DbAddProduct return a product on success', async () => {
+    const { sut } = makeSut();
+    const walletId = 'any_id';
+    const data = {
+      name: 'any_code',
+      quantity: 10,
+      price: 29.8,
+      purchase_date: new Date('2021-08-21'),
+      fees: 0.51,
+    };
+
+    const response = await sut.add(walletId, data);
+
+    expect(response.id).toBeTruthy();
+  });
 });
