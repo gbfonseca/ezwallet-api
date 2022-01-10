@@ -52,4 +52,24 @@ describe('AddProduct Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400);
   });
+
+  test('should return 400 if no quantity provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest: HttpRequest = {
+      params: {
+        walletId: 'any_id',
+      },
+      body: {
+        name: 'any_name',
+        quantity: null,
+        price: 29.8,
+        purchase_date: '27-08-2021',
+        fees: 0.51,
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
