@@ -3,7 +3,7 @@ import { UserModel } from './user';
 export interface WalletModel {
   id: string;
   name: string;
-  user: UserModel;
+  user?: UserModel;
   created_at?: Date;
   updated_at?: Date;
 }
