@@ -1,6 +1,6 @@
 import { Controller } from '../../../protocols/controller';
 import { HttpRequest, HttpResponse } from '../../../protocols/http';
-import { badRequest, serverError } from '../../../helpers/http-helper';
+import { badRequest, serverError, ok } from '../../../helpers/http-helper';
 import { MissingParamError } from '../../../errors/missing-param-error';
 import { InvalidParamError } from '../../../errors/invalid-param-error';
 import { AddProduct } from '../../../../domain/usecases/product/add-product';
@@ -42,12 +42,12 @@ export class AddProductController implements Controller {
         return badRequest(new InvalidParamError('purchase_date'));
       }
 
-      await this.addProduct.add(walletId, {
+      const product = await this.addProduct.add(walletId, {
         ...data,
         purchase_date: purchase_date_formatted,
       });
 
-      return new Promise((resolve) => resolve(null));
+      return ok(product);
     } catch (error) {
       return serverError();
     }
