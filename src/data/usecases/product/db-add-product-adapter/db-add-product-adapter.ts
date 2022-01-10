@@ -13,7 +13,8 @@ export class DbAddProductAdapter implements AddProduct {
     walletId: string,
     addProduct: AddProductModel,
   ): Promise<ProductModel> {
-    await this.findWalletByIdRepository.findById(walletId);
+    const wallet = await this.findWalletByIdRepository.findById(walletId);
+
     return new Promise((resolve) => resolve(null));
   }
 }
