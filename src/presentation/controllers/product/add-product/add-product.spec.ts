@@ -112,4 +112,23 @@ describe('AddProduct Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400);
   });
+
+  test('should return 400 if invalid purchase_date provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest: HttpRequest = {
+      params: {
+        walletId: 'any_id',
+      },
+      body: {
+        name: 'any_name',
+        quantity: 10,
+        price: 29.1,
+        purchase_date: '2021-08-1012',
+        fees: 0.51,
+      },
+    };
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
