@@ -42,16 +42,16 @@ describe('LoggedUser Controller', () => {
   test('should returns 500 if LoggedUser throws', async () => {
     const sut = makeSut();
     jest.spyOn(sut, 'handle').mockImplementationOnce(async () => {
-      return new Promise((resolve) => resolve(serverError()));
+      return new Promise((resolve, reject) => reject(new Error()));
     });
     const httpRequest: HttpRequest = {
       body: {},
       headers: {},
     };
 
-    const httpResponse = await sut.handle(httpRequest);
+    const httpResponse = sut.handle(httpRequest);
 
-    expect(httpResponse.statusCode).toBe(500);
+    await expect(httpResponse).rejects.toThrow();
   });
 
   test('should returns 404 if user not found', async () => {
