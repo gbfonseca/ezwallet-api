@@ -35,7 +35,7 @@ describe('WalletTypeormRepository', () => {
     );
   });
 
-  it('should return an wallet on success', async () => {
+  test('should return an wallet on success', async () => {
     const sut = makeSut();
 
     const addWallet = {
@@ -55,7 +55,7 @@ describe('WalletTypeormRepository', () => {
     expect(response.id).toBeTruthy();
   });
 
-  it('should return an wallets array on success', async () => {
+  test('should return an wallets array on success', async () => {
     const sut = makeSut();
 
     const addWallet = {
@@ -76,5 +76,26 @@ describe('WalletTypeormRepository', () => {
     const response = await sut.findByUserId(id);
 
     expect(response.length).toBeGreaterThan(0);
+  });
+
+  test('should return an wallet on success', async () => {
+    const sut = makeSut();
+
+    const addWallet = {
+      name: 'Any Wallet Name',
+    };
+
+    const user = {
+      id: 'any_id',
+      name: 'any_name',
+      lastName: 'any_lastName',
+      email: 'any_email@mail.com',
+    };
+
+    const wallet = await sut.add(addWallet, user);
+
+    const response = await sut.findById(wallet.id);
+
+    expect(response.id).toBeTruthy();
   });
 });
