@@ -108,6 +108,23 @@ describe('DbAuthentication Adapter', () => {
     await expect(httpResponse).rejects.toThrow();
   });
 
+  test('should throws if findUserByEmailRepository if no user returned', async () => {
+    const { sut, findUserByEmailRepositoryStub } = makeSut();
+    jest
+      .spyOn(findUserByEmailRepositoryStub, 'findByEmail')
+      .mockReturnValue(new Promise((resolve) => resolve(null)));
+    const httpRequest = {
+      body: {
+        email: 'any_email@mail.com',
+        password: 'any_password',
+      },
+    };
+
+    const promise = sut.checkCredentials(httpRequest.body);
+
+    await expect(promise).rejects.toThrow('E-mail/Senha incorretos.');
+  });
+
   test('should throws if TokenGenerator throws', async () => {
     const { sut, tokenGeneratorStub } = makeSut();
     jest
