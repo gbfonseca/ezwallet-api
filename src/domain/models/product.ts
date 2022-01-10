@@ -1,5 +1,3 @@
-import { WalletModel } from './wallet';
-
 export interface ProductModel {
   id: string;
   name: string;
@@ -7,5 +5,4 @@ export interface ProductModel {
   price: number;
   purchase_date: Date;
   fees?: number;
-  wallet: WalletModel;
 }

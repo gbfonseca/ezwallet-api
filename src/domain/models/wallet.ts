@@ -1,3 +1,4 @@
+import { VariableIncomeModel } from '../usecases/wallet/variable_income';
 import { UserModel } from './user';
 
 export interface WalletModel {
@@ -6,4 +7,5 @@ export interface WalletModel {
   user?: UserModel;
   created_at?: Date;
   updated_at?: Date;
+  variable_income: VariableIncomeModel;
 }

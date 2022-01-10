@@ -1,3 +1,4 @@
+import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
 import { DbAddWalletAdapter } from './db-add-wallet-adapter';
 import {
   UserModel,
@@ -17,17 +18,7 @@ const makeAddWalletRepository = (): AddWalletRepository => {
       addWallet: AddWalletModel,
       user: UserModel,
     ): Promise<WalletModel> {
-      const fakeWallet: WalletModel = {
-        id: 'any_id',
-        name: 'Any Wallet Name',
-        user: {
-          id: 'any_id',
-          name: 'any_name',
-          lastName: 'any_lastName',
-          email: 'any_email@mail.com',
-        },
-      };
-      return new Promise((resolve) => resolve(fakeWallet));
+      return new Promise((resolve) => resolve(fakeWalletCreated));
     }
   }
 
@@ -101,10 +92,6 @@ describe('DbAddWalletAdapter', () => {
 
     const reponse = await sut.add(addWallet, user);
 
-    expect(reponse).toEqual({
-      id: 'any_id',
-      name: addWallet.name,
-      user,
-    });
+    expect(reponse.id).toBeTruthy();
   });
 });

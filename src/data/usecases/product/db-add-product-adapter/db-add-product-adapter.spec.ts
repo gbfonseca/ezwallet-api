@@ -1,12 +1,10 @@
 import { WalletModel } from '../../../../domain/models/wallet';
 import { DbAddProductAdapter } from './db-add-product-adapter';
-import { fakeWallet } from '../../../../../tests/factories/fake-wallet';
 import { FindWalletByIdRepository } from '../../../protocols/find-wallet-by-id-repository';
-import {
-  AddProductRepository,
-  AddProductRepositoryData,
-} from '../../../protocols/add-product-repository';
+import { AddProductRepository } from '../../../protocols/add-product-repository';
 import { ProductModel } from '../../../../domain/models/product';
+import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
+import { AddProductModel } from '../../../../domain/usecases/product/add-product';
 
 interface SutTypes {
   sut: DbAddProductAdapter;
@@ -20,7 +18,14 @@ const makeFindWalletByIdRepository = (): FindWalletByIdRepository => {
       return new Promise((resolve) =>
         resolve({
           id,
-          ...fakeWallet,
+          name: 'Any Walelt',
+          variable_income: {
+            id: 'any_id',
+            name: 'Renda Variável',
+            invested_value: 0.0,
+            current_value: 0.0,
+            percentage_yield: 0.0,
+          },
         }),
       );
     }
@@ -31,7 +36,7 @@ const makeFindWalletByIdRepository = (): FindWalletByIdRepository => {
 
 const makeAddProductRepository = (): AddProductRepository => {
   class AddProductRepositoryStub implements AddProductRepository {
-    async add(addProduct: AddProductRepositoryData): Promise<ProductModel> {
+    async add(addProduct: AddProductModel): Promise<ProductModel> {
       return new Promise((resolve) =>
         resolve({
           id: 'any_id',

@@ -1,6 +1,7 @@
 import { WalletModel } from '../create-wallet/create-wallet-protocols';
 import { FindWalletController } from './find-wallet';
 import { FindWalletsByUserId } from '../../../../domain/usecases/wallet/find-wallets-by-user-id';
+import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
 interface SutTypes {
   sut: FindWalletController;
   findWalletsByUserIdStub: FindWalletsByUserId;
@@ -9,18 +10,7 @@ interface SutTypes {
 const makeFindWalletsByUserId = (): FindWalletsByUserId => {
   class FindWalletsByUserIdStub implements FindWalletsByUserId {
     async find(id: string): Promise<WalletModel[]> {
-      const fakeWallet = {
-        id: 'any_id',
-        name: 'any_name',
-        user: {
-          id: 'any_id',
-          email: 'any_email@mail.com',
-          name: 'any_name',
-          lastName: 'any_lastName',
-        },
-      };
-
-      return new Promise((resolve) => resolve([fakeWallet]));
+      return new Promise((resolve) => resolve([fakeWalletCreated]));
     }
   }
 

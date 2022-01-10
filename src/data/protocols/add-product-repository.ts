@@ -1,11 +1,10 @@
 import { ProductModel } from '../../domain/models/product';
-import { WalletModel } from '../../domain/models/wallet';
 import { AddProductModel } from '../../domain/usecases/product/add-product';
-
-export type AddProductRepositoryData = AddProductModel & {
-  wallet: WalletModel;
-};
+import { VariableIncomeModel } from '../../domain/usecases/wallet/variable_income';
 
 export interface AddProductRepository {
-  add(addProduct: AddProductRepositoryData): Promise<ProductModel>;
+  add(
+    addProduct: AddProductModel,
+    variable_income: VariableIncomeModel,
+  ): Promise<ProductModel>;
 }

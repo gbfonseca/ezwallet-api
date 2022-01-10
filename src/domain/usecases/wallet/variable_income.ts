@@ -1,4 +1,4 @@
-import { WalletModel } from '../../models/wallet';
+import { ProductModel } from '../../models/product';
 
 export interface VariableIncomeModel {
   id: string;
@@ -6,5 +6,5 @@ export interface VariableIncomeModel {
   invested_value: number;
   current_value: number;
   percentage_yield: number;
-  wallet: WalletModel;
+  products?: ProductModel[];
 }

@@ -24,9 +24,12 @@ const makeAddProduct = (): AddProduct => {
         price: 29.8,
         purchase_date: new Date('2021-08-27'),
         fees: 0.51,
-        wallet: {
+        variable_income: {
           id: 'any_id',
-          ...fakeWallet,
+          name: 'Renda Variável',
+          invested_value: 0.0,
+          current_value: 0.0,
+          percentage_yield: 0.0,
         },
       };
       return new Promise((resolve) => resolve(fakeProduct));

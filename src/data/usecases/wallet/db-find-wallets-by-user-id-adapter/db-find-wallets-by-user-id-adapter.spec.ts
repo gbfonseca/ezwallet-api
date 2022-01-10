@@ -1,6 +1,7 @@
 import { WalletModel } from '../../../../domain/models/wallet';
 import { DbFindWalletsByUserIdAdapter } from './db-find-wallets-by-user-id-adapter';
 import { FindWalletsByUserIdRepository } from '../../../protocols/find-wallets-by-user-id-repository';
+import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
 interface SutTypes {
   sut: DbFindWalletsByUserIdAdapter;
   findWalletsByUserIdRepositoryStub: FindWalletsByUserIdRepository;
@@ -11,18 +12,7 @@ const makeFindWalletsByUserIdRepository = (): FindWalletsByUserIdRepository => {
     implements FindWalletsByUserIdRepository
   {
     findByUserId(id: string): Promise<WalletModel[]> {
-      const fakeWallet = {
-        id: 'any_id',
-        name: 'any_name',
-        user: {
-          id: 'any_id',
-          email: 'any_email@mail.com',
-          name: 'any_name',
-          lastName: 'any_lastName',
-        },
-      };
-
-      return new Promise((resolve) => resolve([fakeWallet]));
+      return new Promise((resolve) => resolve([fakeWalletCreated]));
     }
   }
 
