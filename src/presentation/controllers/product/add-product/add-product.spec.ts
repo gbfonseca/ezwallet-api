@@ -32,4 +32,24 @@ describe('AddProduct Controller', () => {
 
     expect(sutSpy).toHaveBeenCalledWith(httpRequest);
   });
+
+  test('should return 400 if no name provided', async () => {
+    const { sut } = makeSut();
+    const httpRequest: HttpRequest = {
+      params: {
+        walletId: 'any_id',
+      },
+      body: {
+        name: null,
+        quantity: 10,
+        price: 29.8,
+        purchase_date: '27-08-2021',
+        fees: 0.51,
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
