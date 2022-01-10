@@ -5,8 +5,9 @@ export interface HttpResponse<T = any> {
   body: T;
 }
 
-export interface HttpRequest<T = any> {
+export interface HttpRequest<T = any, P = any> {
   body?: T;
+  params?: P;
   headers?: {
     authorization?: string;
   };
