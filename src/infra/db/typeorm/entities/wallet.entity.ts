@@ -22,6 +22,27 @@ export class Wallet implements WalletModel {
   @Column({ type: 'varchar', nullable: false, length: 50 })
   name: string;
 
+  @Column({
+    type: 'float',
+    scale: 2,
+    default: 0.0,
+  })
+  invested_value: number;
+
+  @Column({
+    type: 'float',
+    scale: 2,
+    default: 0.0,
+  })
+  current_value: number;
+
+  @Column({
+    type: 'float',
+    scale: 2,
+    default: 0.0,
+  })
+  percentage_yield: number;
+
   @OneToOne(() => VariableIncome, (variable_icome) => variable_icome.wallet, {
     cascade: true,
     eager: true,
