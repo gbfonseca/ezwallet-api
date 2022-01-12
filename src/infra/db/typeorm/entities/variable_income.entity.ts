@@ -26,16 +26,14 @@ export class VariableIncome implements VariableIncomeModel {
   name: string;
 
   @Column({
-    type: 'decimal',
-    precision: 15,
+    type: 'float',
     scale: 2,
     default: 0.0,
   })
   invested_value: number;
 
   @Column({
-    type: 'decimal',
-    precision: 15,
+    type: 'float',
     scale: 2,
     default: 0.0,
   })

@@ -19,8 +19,7 @@ export class Product implements ProductModel {
   quantity: number;
 
   @Column({
-    type: 'decimal',
-    precision: 15,
+    type: 'float',
     scale: 2,
     default: 0.0,
   })
@@ -30,8 +29,7 @@ export class Product implements ProductModel {
   purchase_date: Date;
 
   @Column({
-    type: 'decimal',
-    precision: 15,
+    type: 'float',
     scale: 2,
     default: 0.0,
   })
