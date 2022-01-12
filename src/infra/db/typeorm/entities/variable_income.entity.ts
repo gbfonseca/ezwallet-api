@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   Column,
   Entity,
   JoinColumn,
@@ -55,4 +56,17 @@ export class VariableIncome implements VariableIncomeModel {
   })
   @JoinColumn()
   products: ProductModel[];
+
+  @AfterLoad()
+  async setValues() {
+    this.invested_value = this.products.reduce(
+      (acumulator, actual) => (acumulator += actual.quantity * actual.price),
+      0,
+    );
+
+    const percentage =
+      (100 * (this.invested_value - this.current_value)) / this.invested_value;
+
+    this.percentage_yield = percentage ? percentage : 0;
+  }
 }

@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   Column,
   CreateDateColumn,
   Entity,
@@ -58,4 +59,9 @@ export class Wallet implements WalletModel {
 
   @UpdateDateColumn()
   updated_at?: Date;
+
+  @AfterLoad()
+  async setValues() {
+    this.invested_value = this.variable_income.invested_value;
+  }
 }
