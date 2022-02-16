@@ -7,6 +7,7 @@ import {
   AddProductRepositoryData,
 } from '../../../protocols/add-product-repository';
 import { ProductModel } from '../../../../domain/models/product';
+import { TransactionTypeEnum } from '../../../../domain/models/transaction';
 
 interface SutTypes {
   sut: DbAddProductAdapter;
@@ -32,12 +33,32 @@ const makeFindWalletByIdRepository = (): FindWalletByIdRepository => {
 const makeAddProductRepository = (): AddProductRepository => {
   class AddProductRepositoryStub implements AddProductRepository {
     async add(addProduct: AddProductRepositoryData): Promise<ProductModel> {
-      return new Promise((resolve) =>
-        resolve({
+      const fakeProduct: ProductModel = {
+        id: 'any_id',
+        name: 'any_code',
+        quantity: 10,
+        average_price: 29.8,
+        total_price: 290.8,
+        variable_income: {
           id: 'any_id',
-          ...addProduct,
-        }),
-      );
+          name: 'Renda Variável',
+          invested_value: 0.0,
+          current_value: 0.0,
+          percentage_yield: 0.0,
+        },
+        transactions: [
+          {
+            id: 'any_id12',
+            price: 29.8,
+            purchase_date: new Date('2021-08-27'),
+            fees: 0.51,
+            name: 'any_code',
+            quantity: 5,
+            type: TransactionTypeEnum.PURCHASE,
+          },
+        ],
+      };
+      return new Promise((resolve) => resolve(fakeProduct));
     }
   }
 

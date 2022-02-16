@@ -1,11 +1,11 @@
-import { WalletModel } from './wallet';
-
+import { TransactionModel } from './transaction';
+import { VariableIncomeModel } from './variable_income';
 export interface ProductModel {
   id: string;
   name: string;
   quantity: number;
-  price: number;
-  purchase_date: Date;
-  fees?: number;
-  wallet: WalletModel;
+  total_price: number;
+  average_price: number;
+  transactions: TransactionModel[];
+  variable_income: VariableIncomeModel;
 }

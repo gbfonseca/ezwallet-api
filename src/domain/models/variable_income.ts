@@ -6,5 +6,4 @@ export interface VariableIncomeModel {
   invested_value: number;
   current_value: number;
   percentage_yield: number;
-  wallet: WalletModel;
 }
