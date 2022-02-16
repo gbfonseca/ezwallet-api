@@ -1,7 +1,16 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  AfterLoad,
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { WalletModel } from '../../../../domain/models/wallet';
 import { VariableIncomeModel } from '../../../../domain/models/variable_income';
 import { Wallet } from './wallet.entity';
+import { ProductModel } from '../../../../domain/models/product';
+import { Product } from './product.entity';
 
 @Entity('VariableIncome')
 export class VariableIncome implements VariableIncomeModel {
@@ -41,4 +50,23 @@ export class VariableIncome implements VariableIncomeModel {
 
   @OneToOne(() => Wallet, (wallet) => wallet.variable_income)
   wallet: WalletModel;
+
+  @OneToMany(() => Product, (product) => product.variable_income, {
+    nullable: true,
+    eager: true,
+  })
+  products: ProductModel[];
+
+  @AfterLoad()
+  async setValues() {
+    this.invested_value = this.products.reduce(
+      (acumulator, actual) => (acumulator += actual.total_price),
+      0,
+    );
+
+    const percentage =
+      (100 * (this.invested_value - this.current_value)) / this.invested_value;
+
+    this.percentage_yield = percentage ? percentage : 0;
+  }
 }

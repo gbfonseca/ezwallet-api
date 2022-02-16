@@ -1,13 +1,14 @@
 import { WalletModel } from '../../../../domain/models/wallet';
 import { DbAddProductAdapter } from './db-add-product-adapter';
-import { fakeWallet } from '../../../../../tests/factories/fake-wallet';
-import { FindWalletByIdRepository } from '../../../protocols/find-wallet-by-id-repository';
 import {
-  AddProductRepository,
-  AddProductRepositoryData,
-} from '../../../protocols/add-product-repository';
+  fakeWallet,
+  fakeWalletCreated,
+} from '../../../../../tests/factories/fake-wallet';
+import { FindWalletByIdRepository } from '../../../protocols/find-wallet-by-id-repository';
+import { AddProductRepository } from '../../../protocols/add-product-repository';
 import { ProductModel } from '../../../../domain/models/product';
 import { TransactionTypeEnum } from '../../../../domain/models/transaction';
+import { AddProductModel } from '../../../../domain/usecases/product/add-product';
 
 interface SutTypes {
   sut: DbAddProductAdapter;
@@ -18,12 +19,7 @@ interface SutTypes {
 const makeFindWalletByIdRepository = (): FindWalletByIdRepository => {
   class FindWalletByIdRepositoryStub implements FindWalletByIdRepository {
     async findById(id: string): Promise<WalletModel> {
-      return new Promise((resolve) =>
-        resolve({
-          id,
-          ...fakeWallet,
-        }),
-      );
+      return new Promise((resolve) => resolve(fakeWalletCreated));
     }
   }
 
@@ -32,7 +28,7 @@ const makeFindWalletByIdRepository = (): FindWalletByIdRepository => {
 
 const makeAddProductRepository = (): AddProductRepository => {
   class AddProductRepositoryStub implements AddProductRepository {
-    async add(addProduct: AddProductRepositoryData): Promise<ProductModel> {
+    async add(addProduct: AddProductModel): Promise<ProductModel> {
       const fakeProduct: ProductModel = {
         id: 'any_id',
         name: 'any_code',

@@ -9,7 +9,7 @@ export const TypeormHelper = {
     const entities = this.client.entityMetadatas;
     entities.forEach(async (entity) => {
       const repository = this.client.getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.name}`);
+      await repository.query(`DELETE FROM '${entity.name}'`);
     });
   },
 

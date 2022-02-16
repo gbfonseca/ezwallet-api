@@ -1,3 +1,4 @@
+import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
 import {
   WalletModel,
   AddWallet,
@@ -18,18 +19,7 @@ const makeAddWallet = (): AddWallet => {
       addWallet: AddWalletModel,
       user: UserModel,
     ): Promise<WalletModel> {
-      const fakeWallet: WalletModel = {
-        id: 'any_id',
-        name: 'Any Wallet Name',
-        user: {
-          id: 'any_id',
-          name: 'any_name',
-          lastName: 'any_lastName',
-          email: 'any_email@mail.com',
-          password: 'any_password',
-        },
-      };
-      return new Promise((resolve) => resolve(fakeWallet));
+      return new Promise((resolve) => resolve(fakeWalletCreated));
     }
   }
   return new AddWalletStub();

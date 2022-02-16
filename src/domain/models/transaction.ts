@@ -1,3 +1,5 @@
+import { ProductModel } from './product';
+
 export interface TransactionModel {
   id: string;
   name: string;
@@ -5,7 +7,7 @@ export interface TransactionModel {
   price: number;
   purchase_date: Date;
   fees?: number;
-  type: TransactionTypeEnum;
+  type: string;
 }
 
 export enum TransactionTypeEnum {

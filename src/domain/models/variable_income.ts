@@ -1,3 +1,4 @@
+import { ProductModel } from './product';
 import { WalletModel } from './wallet';
 
 export interface VariableIncomeModel {
@@ -6,4 +7,5 @@ export interface VariableIncomeModel {
   invested_value: number;
   current_value: number;
   percentage_yield: number;
+  products?: ProductModel[];
 }
