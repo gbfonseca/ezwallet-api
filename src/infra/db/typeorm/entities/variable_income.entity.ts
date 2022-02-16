@@ -1,6 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { WalletModel } from '../../../../domain/models/wallet';
-import { VariableIncomeModel } from '../../../../domain/usecases/wallet/variable_income';
+import { VariableIncomeModel } from '../../../../domain/models/variable_income';
 import { Wallet } from './wallet.entity';
 
 @Entity('VariableIncome')

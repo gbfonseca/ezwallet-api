@@ -1,4 +1,4 @@
-import { WalletModel } from '../../models/wallet';
+import { WalletModel } from './wallet';
 
 export interface VariableIncomeModel {
   id: string;

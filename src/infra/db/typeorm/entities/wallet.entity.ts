@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { UserModel } from '../../../../domain/models/user';
 import { WalletModel } from '../../../../domain/models/wallet';
-import { VariableIncomeModel } from '../../../../domain/usecases/wallet/variable_income';
+import { VariableIncomeModel } from '../../../../domain/models/variable_income';
 import { User } from './user.entity';
 import { VariableIncome } from './variable_income.entity';
 
