@@ -15,12 +15,11 @@ export class ProductTypeormRepository
     addProduct: AddProductModel,
     variable_income: VariableIncomeModel,
   ): Promise<ProductModel> {
-    const { name, price, purchase_date, quantity, fees } = addProduct;
-    console.log('aqui');
-    const hasProductOnVariableIncome = variable_income?.products?.find(
+    const { name } = addProduct;
+
+    const hasProductOnVariableIncome = variable_income.products.find(
       (product) => product.name === name,
     );
-    console.log({ hasProductOnVariableIncome });
     if (hasProductOnVariableIncome) {
       const product = await this.findOne({
         where: {
@@ -45,8 +44,6 @@ export class ProductTypeormRepository
     });
 
     await this.save(product);
-
-    console.log(product);
 
     return product;
   }

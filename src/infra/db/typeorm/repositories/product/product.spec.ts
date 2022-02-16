@@ -28,8 +28,6 @@ describe('ProductTypeorm Repository', () => {
     await TypeormHelper.client.query('PRAGMA foreign_keys=OFF');
 
     wallet = await createFakeWallet();
-
-    console.log(wallet);
   });
 
   afterAll(() => {
