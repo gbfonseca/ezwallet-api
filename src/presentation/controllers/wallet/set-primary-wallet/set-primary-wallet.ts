@@ -5,7 +5,9 @@ import {
   HttpRequest,
   HttpResponse,
   MissingParamError,
+  ok,
   serverError,
+  WalletModel,
 } from '../create-wallet/create-wallet-protocols';
 
 export class SetPrimaryWalletController implements Controller {
@@ -13,7 +15,7 @@ export class SetPrimaryWalletController implements Controller {
 
   async handle(
     httpRequest: HttpRequest<unknown, { walletId: string }>,
-  ): Promise<HttpResponse<any>> {
+  ): Promise<HttpResponse<WalletModel>> {
     try {
       const {
         params: { walletId },
@@ -23,9 +25,9 @@ export class SetPrimaryWalletController implements Controller {
         return badRequest(new MissingParamError('walletId'));
       }
 
-      await this.setPrimaryWallet.setPrimary(walletId);
+      const wallet = await this.setPrimaryWallet.setPrimary(walletId);
 
-      return new Promise((resolve) => resolve(null));
+      return ok<WalletModel>(wallet);
     } catch (error) {
       return serverError();
     }
