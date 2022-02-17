@@ -1,6 +1,7 @@
 import { TypeormHelper } from '../../helpers/typeorm-helper';
 import { WalletTypeormRepository } from './wallet';
 import * as dotenv from 'dotenv';
+import { createFakeWallet } from '../../../../../../tests/factories/create-wallet';
 
 dotenv.config();
 
@@ -76,5 +77,15 @@ describe('WalletTypeormRepository', () => {
     const response = await sut.findByUserId(id);
 
     expect(response.length).toBeGreaterThan(0);
+  });
+
+  it('should return an wallet by id on success', async () => {
+    const sut = makeSut();
+
+    const fakeWallet = await createFakeWallet();
+
+    const response = await sut.findById(fakeWallet.id);
+
+    expect(response.id).toBeTruthy();
   });
 });
