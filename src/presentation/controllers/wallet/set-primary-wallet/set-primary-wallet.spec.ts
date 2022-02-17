@@ -74,4 +74,17 @@ describe('SetPrimaryWallet Controller', () => {
 
     expect(httpResponse.statusCode).toBe(500);
   });
+
+  it('should return 200 on success', async () => {
+    const { sut } = makeSut();
+    const httpRequest: HttpRequest = {
+      params: {
+        walletId: 'any_id',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(200);
+  });
 });
