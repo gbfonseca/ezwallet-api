@@ -1,14 +1,29 @@
 import { HttpRequest } from '../../../protocols/http';
 import { SetPrimaryWalletController } from './set-primary-wallet';
+import { SetPrimaryWallet } from '../../../../domain/usecases/wallet/set-primary-wallet';
+import { WalletModel } from '../create-wallet/create-wallet-protocols';
+import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
 
 interface SutTypes {
   sut: SetPrimaryWalletController;
+  setPrimaryWalletStub: SetPrimaryWallet;
 }
 
-const makeSut = (): SutTypes => {
-  const sut = new SetPrimaryWalletController();
+const makeSetPrimaryWallet = (): SetPrimaryWallet => {
+  class SetPrimaryWalletStub implements SetPrimaryWallet {
+    setPrimary(walletId: string): Promise<WalletModel> {
+      return new Promise((resolve) => resolve(fakeWalletCreated));
+    }
+  }
 
-  return { sut };
+  return new SetPrimaryWalletStub();
+};
+
+const makeSut = (): SutTypes => {
+  const setPrimaryWalletStub = makeSetPrimaryWallet();
+  const sut = new SetPrimaryWalletController(setPrimaryWalletStub);
+
+  return { sut, setPrimaryWalletStub };
 };
 
 describe('SetPrimaryWallet Controller', () => {
@@ -38,5 +53,25 @@ describe('SetPrimaryWallet Controller', () => {
     const httpResponse = await sut.handle(httpRequest);
 
     expect(httpResponse.statusCode).toBe(400);
+  });
+
+  it('should return 500 if SetPrimaryWallet throws', async () => {
+    const { sut, setPrimaryWalletStub } = makeSut();
+
+    jest
+      .spyOn(setPrimaryWalletStub, 'setPrimary')
+      .mockReturnValueOnce(
+        new Promise((resolve, reject) => reject(new Error())),
+      );
+
+    const httpRequest: HttpRequest = {
+      params: {
+        walletId: 'any_id',
+      },
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(500);
   });
 });
