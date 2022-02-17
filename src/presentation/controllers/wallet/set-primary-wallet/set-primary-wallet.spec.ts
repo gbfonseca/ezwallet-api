@@ -27,4 +27,16 @@ describe('SetPrimaryWallet Controller', () => {
 
     expect(sutSpy).toHaveBeenCalledWith(httpRequest);
   });
+
+  it('should return 400 if no walletId provided', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest: HttpRequest = {
+      params: {},
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
