@@ -64,6 +64,8 @@ export class VariableIncome implements VariableIncomeModel {
       0,
     );
 
+    this.current_value = 0;
+
     const percentage =
       (100 * (this.invested_value - this.current_value)) / this.invested_value;
 
