@@ -1,8 +1,10 @@
-import { HttpRequest } from '../../../protocols/http';
-import { SetPrimaryWalletController } from './set-primary-wallet';
-import { SetPrimaryWallet } from '../../../../domain/usecases/wallet/set-primary-wallet';
-import { WalletModel } from '../create-wallet/create-wallet-protocols';
 import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
+import {
+  HttpRequest,
+  WalletModel,
+  SetPrimaryWallet,
+  SetPrimaryWalletController,
+} from './set-wallet-protocols';
 
 interface SutTypes {
   sut: SetPrimaryWalletController;

@@ -1,5 +1,3 @@
-import { SetPrimaryWallet } from '../../../../domain/usecases/wallet/set-primary-wallet';
-import { Controller } from '../../../protocols/controller';
 import {
   badRequest,
   HttpRequest,
@@ -8,7 +6,9 @@ import {
   ok,
   serverError,
   WalletModel,
-} from '../create-wallet/create-wallet-protocols';
+  SetPrimaryWallet,
+  Controller,
+} from './set-wallet-protocols';
 
 export class SetPrimaryWalletController implements Controller {
   constructor(private readonly setPrimaryWallet: SetPrimaryWallet) {}
