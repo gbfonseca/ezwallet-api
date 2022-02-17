@@ -11,6 +11,10 @@ export class ProductTypeormRepository
   extends Repository<Product>
   implements AddProductRepository
 {
+  constructor(private readonly transactionRepository: Repository<Transaction>) {
+    super();
+  }
+
   async add(
     addProduct: AddProductModel,
     variable_income: VariableIncomeModel,
@@ -26,11 +30,10 @@ export class ProductTypeormRepository
           name: addProduct.name,
         },
       });
-      const transactionRepository: Repository<Transaction> =
-        getRepository(Transaction);
-      const transaction = transactionRepository.create(addProduct);
 
-      await transactionRepository.save(transaction);
+      const transaction = this.transactionRepository.create(addProduct);
+
+      await this.transactionRepository.save(transaction);
 
       product.transactions.push(transaction);
       await this.save(product);
