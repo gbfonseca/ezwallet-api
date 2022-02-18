@@ -3,13 +3,15 @@ import { Controller } from '../../../protocols/controller';
 import { HttpRequest, HttpResponse } from '../../../protocols/http';
 import {
   badRequest,
+  ok,
   serverError,
+  WalletModel,
 } from '../create-wallet/create-wallet-protocols';
 
 export class GetPrimaryWalletController implements Controller {
   constructor(private readonly getPrimaryWallet: GetPrimaryWallet) {}
 
-  async handle(httpRequest: HttpRequest<any, any>): Promise<HttpResponse<any>> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse<WalletModel>> {
     try {
       const { user } = httpRequest;
 
@@ -17,9 +19,9 @@ export class GetPrimaryWalletController implements Controller {
         return badRequest(new Error('Usuário Inválido'));
       }
 
-      await this.getPrimaryWallet.getPrimary(user.id);
+      const primaryWallet = await this.getPrimaryWallet.getPrimary(user.id);
 
-      return new Promise((resolve) => resolve(null));
+      return ok<WalletModel>(primaryWallet);
     } catch (error) {
       return serverError();
     }
