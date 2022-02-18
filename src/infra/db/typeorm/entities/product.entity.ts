@@ -17,7 +17,7 @@ export class Product implements ProductModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', unique: true, nullable: false, length: 128 })
+  @Column({ type: 'varchar', nullable: false, length: 128 })
   name: string;
 
   @Column({

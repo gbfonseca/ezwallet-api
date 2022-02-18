@@ -11,15 +11,11 @@ export class ProductTypeormRepository
   extends Repository<Product>
   implements AddProductRepository
 {
-  constructor(private readonly transactionRepository: Repository<Transaction>) {
-    super();
-  }
-
   async add(
     addProduct: AddProductModel,
     variable_income: VariableIncomeModel,
   ): Promise<ProductModel> {
-    const { name } = addProduct;
+    const { name, price, purchase_date, quantity, fees } = addProduct;
 
     const hasProductOnVariableIncome = variable_income.products.find(
       (product) => product.name === name,
@@ -31,9 +27,10 @@ export class ProductTypeormRepository
         },
       });
 
-      const transaction = this.transactionRepository.create(addProduct);
+      const transactionRepository = getRepository(Transaction);
 
-      await this.transactionRepository.save(transaction);
+      const transaction = transactionRepository.create(addProduct);
+      await transactionRepository.save(transaction);
 
       product.transactions.push(transaction);
       await this.save(product);
