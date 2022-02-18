@@ -8,8 +8,10 @@ export class DbSetPrimaryWalletAdapter implements SetPrimaryWallet {
   ) {}
 
   async setPrimary(walletId: string): Promise<WalletModel> {
-    await this.setPrimaryWalletRepository.setPrimary(walletId);
+    const primaryWallet = await this.setPrimaryWalletRepository.setPrimary(
+      walletId,
+    );
 
-    return new Promise((resolve) => resolve(null));
+    return primaryWallet;
   }
 }
