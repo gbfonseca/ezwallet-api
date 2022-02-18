@@ -52,4 +52,14 @@ describe('DbGetPrimaryWallet Adapter', () => {
 
     await expect(promise).rejects.toThrow();
   });
+
+  it('should return the primary wallet on succes', async () => {
+    const { sut } = makeSut();
+
+    const user_id = 'any_id';
+
+    const response = await sut.getPrimary(user_id);
+
+    expect(response.primary).toBe(true);
+  });
 });
