@@ -1,12 +1,13 @@
-import { GetPrimaryWallet } from '../../../../domain/usecases/wallet/get-primary-wallet';
-import { Controller } from '../../../protocols/controller';
-import { HttpRequest, HttpResponse } from '../../../protocols/http';
 import {
+  GetPrimaryWallet,
+  Controller,
+  HttpRequest,
+  HttpResponse,
   badRequest,
   ok,
   serverError,
   WalletModel,
-} from '../create-wallet/create-wallet-protocols';
+} from './get-primary-wallet-protocols';
 
 export class GetPrimaryWalletController implements Controller {
   constructor(private readonly getPrimaryWallet: GetPrimaryWallet) {}

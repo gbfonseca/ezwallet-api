@@ -1,6 +1,8 @@
-import { GetPrimaryWalletController } from './get-primary-wallet';
-import { GetPrimaryWallet } from '../../../../domain/usecases/wallet/get-primary-wallet';
-import { WalletModel } from '../create-wallet/create-wallet-protocols';
+import {
+  GetPrimaryWallet,
+  GetPrimaryWalletController,
+  WalletModel,
+} from './get-primary-wallet-protocols';
 import { fakeWalletCreated } from '../../../../../tests/factories/fake-wallet';
 interface SutTypes {
   sut: GetPrimaryWalletController;
