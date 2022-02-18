@@ -53,4 +53,14 @@ describe('DbSetPrimaryWalletAdapter', () => {
 
     await expect(promise).rejects.toThrow();
   });
+
+  it('should return an wallet on success', async () => {
+    const { sut } = makeSut();
+
+    const walletId = 'any_id';
+
+    const response = await sut.setPrimary(walletId);
+
+    expect(response.id).toBeTruthy();
+  });
 });
