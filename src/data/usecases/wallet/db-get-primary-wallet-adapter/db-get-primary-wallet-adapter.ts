@@ -8,8 +8,10 @@ export class DbGetPrimaryWalletAdapter implements GetPrimaryWallet {
   ) {}
 
   async getPrimary(userId: string): Promise<WalletModel> {
-    await this.getPrimaryWalletRepository.getPrimary(userId);
+    const primaryWallet = await this.getPrimaryWalletRepository.getPrimary(
+      userId,
+    );
 
-    return new Promise((resolve) => resolve(null));
+    return primaryWallet;
   }
 }
