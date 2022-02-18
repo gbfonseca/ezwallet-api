@@ -54,9 +54,42 @@ export class WalletTypeormRepository
   }
 
   async setPrimary(walletId: string): Promise<WalletModel> {
-    const wallet = await this.findOne({ where: { id: walletId } });
+    const wallet = await this.findOne({
+      where: { id: walletId },
+      join: {
+        alias: 'wallet',
+        leftJoinAndSelect: {
+          user: 'wallet.user',
+          variable_income: 'wallet.variable_income',
+          products: 'variable_income.products',
+          transactions: 'products.transactions',
+        },
+      },
+    });
     wallet.primary = true;
+
     await this.save(wallet);
+
+    const userId = wallet.user.id;
+
+    const wallets = await this.find({
+      select: ['user'],
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+
+    for (const walletToNotPrimary of wallets) {
+      walletToNotPrimary.primary = false;
+      await this.save(walletToNotPrimary);
+    }
+
+    delete wallet.user;
+
+    console.log(wallet);
+
     return wallet;
   }
 }
