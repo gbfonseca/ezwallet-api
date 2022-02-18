@@ -19,12 +19,17 @@ export class WalletTypeormRepository
     SetPrimaryWalletRepository
 {
   async add(addWallet: AddWalletModel, user: UserModel): Promise<WalletModel> {
+    const hasWallet = await this.count({
+      where: { user: { id: user.id } },
+      select: ['user'],
+    });
     const { name } = addWallet;
     const variableIncomeRepository = getRepository(VariableIncome);
     const wallet = this.create();
 
     wallet.name = name;
     wallet.user = user;
+    wallet.primary = hasWallet > 0 ? false : true;
     wallet.variable_income = variableIncomeRepository.create({ products: [] });
     await this.save(wallet);
 
