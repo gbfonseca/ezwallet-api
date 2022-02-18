@@ -30,4 +30,16 @@ describe('GetPrimaryWallet Controller', () => {
 
     expect(sutSpy).toHaveBeenCalledWith(httpRequest);
   });
+
+  it('should return 400 if no user provided', async () => {
+    const { sut } = makeSut();
+
+    const httpRequest = {
+      user: null,
+    };
+
+    const httpResponse = await sut.handle(httpRequest);
+
+    expect(httpResponse.statusCode).toBe(400);
+  });
 });
