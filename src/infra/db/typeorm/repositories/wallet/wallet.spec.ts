@@ -88,4 +88,14 @@ describe('WalletTypeormRepository', () => {
 
     expect(response.id).toBeTruthy();
   });
+
+  it('should turn an wallet in primary', async () => {
+    const sut = makeSut();
+
+    const fakeWallet = await createFakeWallet();
+
+    const response = await sut.setPrimary(fakeWallet.id);
+
+    expect(response.primary).toBe(true);
+  });
 });
