@@ -2,6 +2,7 @@ import { EntityRepository, getRepository, Repository } from 'typeorm';
 import { AddWalletRepository } from '../../../../../data/protocols/add-wallet-repository';
 import { FindWalletByIdRepository } from '../../../../../data/protocols/find-wallet-by-id-repository';
 import { FindWalletsByUserIdRepository } from '../../../../../data/protocols/find-wallets-by-user-id-repository';
+import { SetPrimaryWalletRepository } from '../../../../../data/protocols/set-primary-wallet-repository';
 import { UserModel } from '../../../../../domain/models/user';
 import { WalletModel } from '../../../../../domain/models/wallet';
 import { AddWalletModel } from '../../../../../domain/usecases/wallet/add-wallet';
@@ -14,7 +15,8 @@ export class WalletTypeormRepository
   implements
     AddWalletRepository,
     FindWalletsByUserIdRepository,
-    FindWalletByIdRepository
+    FindWalletByIdRepository,
+    SetPrimaryWalletRepository
 {
   async add(addWallet: AddWalletModel, user: UserModel): Promise<WalletModel> {
     const { name } = addWallet;
@@ -49,5 +51,12 @@ export class WalletTypeormRepository
     });
 
     return wallets;
+  }
+
+  async setPrimary(walletId: string): Promise<WalletModel> {
+    const wallet = await this.findOne({ where: { id: walletId } });
+    wallet.primary = true;
+    await this.save(wallet);
+    return wallet;
   }
 }

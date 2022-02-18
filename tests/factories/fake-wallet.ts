@@ -7,6 +7,7 @@ export const fakeWallet = {
 export const fakeWalletCreated: WalletModel = {
   id: 'any_id',
   ...fakeWallet,
+  primary: true,
   variable_income: {
     id: 'any_id',
     name: 'Renda Variável',
