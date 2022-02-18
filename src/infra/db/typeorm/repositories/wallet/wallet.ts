@@ -3,6 +3,8 @@ import { AddWalletRepository } from '../../../../../data/protocols/add-wallet-re
 import { FindWalletByIdRepository } from '../../../../../data/protocols/find-wallet-by-id-repository';
 import { FindWalletsByUserIdRepository } from '../../../../../data/protocols/find-wallets-by-user-id-repository';
 import { SetPrimaryWalletRepository } from '../../../../../data/protocols/set-primary-wallet-repository';
+import { GetPrimaryWalletRepository } from '../../../../../data/protocols/get-primary-wallet-repository';
+
 import { UserModel } from '../../../../../domain/models/user';
 import { WalletModel } from '../../../../../domain/models/wallet';
 import { AddWalletModel } from '../../../../../domain/usecases/wallet/add-wallet';
@@ -16,7 +18,8 @@ export class WalletTypeormRepository
     AddWalletRepository,
     FindWalletsByUserIdRepository,
     FindWalletByIdRepository,
-    SetPrimaryWalletRepository
+    SetPrimaryWalletRepository,
+    GetPrimaryWalletRepository
 {
   async add(addWallet: AddWalletModel, user: UserModel): Promise<WalletModel> {
     const hasWallet = await this.count({
@@ -96,5 +99,17 @@ export class WalletTypeormRepository
     console.log(wallet);
 
     return wallet;
+  }
+
+  async getPrimary(userId: string): Promise<WalletModel> {
+    return await this.findOne({
+      where: {
+        primary: true,
+        user: {
+          id: userId,
+        },
+      },
+      loadEagerRelations: true,
+    });
   }
 }
