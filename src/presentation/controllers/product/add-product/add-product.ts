@@ -38,7 +38,7 @@ export class AddProductController implements Controller {
         }
       }
 
-      if (isNaN(purchase_date_formatted.getTime())) {
+      if (!Number(purchase_date_formatted.getTime())) {
         return badRequest(new InvalidParamError('purchase_date'));
       }
 

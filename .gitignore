@@ -5,3 +5,4 @@ coverage
 test.sql
 .env
 ormconfig.ts
+.dccache
